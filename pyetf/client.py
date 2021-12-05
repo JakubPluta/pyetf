@@ -65,6 +65,7 @@ class ETFDBClient(BaseClient):
         return [self.parse_etf_record(etf) for etf in etfs]
 
 
+# TODO: Work on retry policy with aiohttp.ClientSession
 class AsyncETFDBClient(BaseClient):
     """Async client for etfdb.com"""
 

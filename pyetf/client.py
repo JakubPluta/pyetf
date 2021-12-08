@@ -51,13 +51,16 @@ class BaseClient:
 class ETFDBClient(BaseClient):
 
     def scrape_etfs_from_single_page(self, page):
+        time.sleep(5)
         self._post_json_data['page'] = page
+        print("Getting page ", page)
         return requests.post(self.api_url, json=self._post_json_data, headers=self.headers).json()['data']
 
     def scrape_etfs(self):
         results = []
-        for page in range(1, self.total_pages):
+        for page in range(1, self.total_pages+1):
             etfs = self.scrape_etfs_from_single_page(page)
+            print("Number of etfs ", len(etfs))
             results += self.prepare_list_of_etfs(etfs)
         return results
 

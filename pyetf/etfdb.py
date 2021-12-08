@@ -6,12 +6,21 @@ import re
 import bs4
 import requests
 
+__docformat__ = "numpy"
+
 
 class InvalidETFException(Exception):
-    pass
+    """Invalid ETF Exception class"""
 
 
 def load_ticker_list() -> list:
+    """Loads all available tickers from etfdb.com
+
+    Returns
+    -------
+    list of available etf tickers
+    """
+
     path = os.path.join(
         os.path.dirname(os.path.abspath(__file__)), "data", "etfdb.json"
     )
@@ -24,6 +33,8 @@ tickers: list = [etf.get("symbol") for etf in load_ticker_list()]
 
 
 class ETFDBScraper:
+    """etfdb scraper client"""
+
     BASE_URL = "https://etfdb.com"
     CATEGORIES = {
         "profile": "#etf-ticker-profile",
@@ -33,6 +44,7 @@ class ETFDBScraper:
         "performance": "#performance",
         "technicals": "#technicals",
         "rating": "#realtime-rating",
+        "charts" : "#charts"
     }
 
     def __init__(self, ticker: str):
@@ -41,14 +53,38 @@ class ETFDBScraper:
         else:
             raise InvalidETFException(f"{ticker} doesn't exist in ETF Database\n")
 
-    def _prepare_url(self, category=None):
+    def _prepare_url(self, category=None) -> str:
+        """Builds url for given category and ticker.
+
+        Parameters
+        ----------
+        category: str
+            One from list ["profile", "valuation", "expense", "holdings", "performance", "technicals", "rating"]
+
+        Returns
+        -------
+        str: prepared url for request.
+        """
+
         url = f"{self.BASE_URL}/etf/{self.ticker}/"
         if category and category in self.CATEGORIES:
             url += self.CATEGORIES.get(category)
         return url
 
     @functools.lru_cache(maxsize=128)
-    def _make_soup_request(self, category):
+    def _make_soup_request(self, category: str) -> bs4.BeautifulSoup:
+        """Make GET request to etfdb.com, and put response into BeautifulSoup data structure.
+
+        Parameters
+        ----------
+        category: str
+            One from list ["profile", "valuation", "expense", "holdings", "performance", "technicals", "rating"]
+
+        Returns
+        -------
+        BeautifulSoup object ready to parse with bs4 library
+        """
+
         url = self._prepare_url(category)
         response = requests.get(url)
         return bs4.BeautifulSoup(response.text, "html.parser")
@@ -204,6 +240,8 @@ class ETFDBScraper:
         results = {}
         for metric in metrics[2:]:
             row = [x.text.strip() for x in metric if x.text.strip() != ""]
+            if len(row) == 1:
+                row.append(None)
             results[row[0]] = row[1]
         return results
 
@@ -236,3 +274,13 @@ class ETFDBScraper:
         ]
         return dict(zip(titles, metrics))
 
+    def breakdowns(self):
+        soup = self._make_soup_request("charts")
+        charts_data = soup.find_all('table',class_='chart base-table')
+        if not charts_data:
+            return {"Data" : "Region, country, sector breakdown data not found"}
+
+        chart_series = [x.get('data-chart-series') for x in charts_data]
+        chart_titles = [x.get('data-title').replace('<br>', ' ') for x in charts_data]
+        chart_series_dicts = [json.loads(series) for series in chart_series]
+        return dict(zip(chart_titles, chart_series_dicts))

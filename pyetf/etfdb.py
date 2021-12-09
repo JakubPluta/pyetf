@@ -30,7 +30,7 @@ def load_ticker_list() -> list:
     return data
 
 
-tickers: list = [etf.get("symbol") for etf in load_ticker_list()]
+tickers: dict = {etf.get("symbol"): etf for etf in load_ticker_list()}
 
 
 class ETFDBScraper:
@@ -45,12 +45,13 @@ class ETFDBScraper:
         "performance": "#performance",
         "technicals": "#technicals",
         "rating": "#realtime-rating",
-        "charts" : "#charts"
+        "charts": "#charts",
     }
 
     def __init__(self, ticker: str):
         if ticker.upper() in tickers:
             self.ticker = ticker.upper()
+            self.ticker_data = tickers.get(self.ticker)
         else:
             raise InvalidETFException(f"{ticker} doesn't exist in ETF Database\n")
 
@@ -102,7 +103,12 @@ class ETFDBScraper:
 
         if not soup:
             soup = self._make_soup_request("profile")
-        profile_container = [x.find_all('span') for x in soup.find("div", {"class": "profile-container"}).find_all('div', class_='row')]
+        profile_container = [
+            x.find_all("span")
+            for x in soup.find("div", {"class": "profile-container"}).find_all(
+                "div", class_="row"
+            )
+        ]
         results = []
         for spans in profile_container:
             record = tuple(span.text.strip() for span in spans)
@@ -111,7 +117,7 @@ class ETFDBScraper:
             if len(record) != 2:
                 continue
             results.append(record)
-        return {x:y for x,y  in results}
+        return {x: y for x, y in results}
 
     @_try
     def _trading_data(self, soup: bs4.BeautifulSoup = None) -> dict:
@@ -133,7 +139,7 @@ class ETFDBScraper:
             .text.strip()
             for li in trading_data
         }
-        return {k:v for k,v in trading_dict.items() if v != '' }
+        return {k: v for k, v in trading_dict.items() if v != ""}
 
     @_try
     def _asset_categories(self, soup: bs4.BeautifulSoup = None) -> dict:
@@ -230,32 +236,34 @@ class ETFDBScraper:
         """
 
         soup = self._make_soup_request("profile")
-        etf_ticker_body = soup.find("div", {"id": "etf-ticker-body"}).find("div", class_="row")
+        etf_ticker_body = soup.find("div", {"id": "etf-ticker-body"}).find(
+            "div", class_="row"
+        )
         basic_information = {}
 
-        for row in etf_ticker_body.find_all('div', class_='row'):
+        for row in etf_ticker_body.find_all("div", class_="row"):
             key = row.select_one(":nth-child(1)").text.strip()
             value = row.select_one(":nth-child(2)")
             try:
-                href = value.find('a')['href']
-                if href and key != 'ETF Home Page':
+                href = value.find("a")["href"]
+                if href and key != "ETF Home Page":
                     value_text = self.BASE_URL + href
                 else:
                     value_text = href
             except (KeyError, TypeError):
                 value_text = value.text.strip()
 
-            if key == 'ETF Home Page' and value_text.startswith(self.BASE_URL):
-                value_text.replace(self.BASE_URL, '')
+            if key == "ETF Home Page" and value_text.startswith(self.BASE_URL):
+                value_text.replace(self.BASE_URL, "")
 
-            basic_information.update({key:value_text})
+            basic_information.update({key: value_text})
 
         basic_information.update(self._get_profile_container(soup))
         basic_information.update(self._trading_data(soup))
         basic_information.update(self._asset_categories(soup))
         basic_information.update(self._factset_classification(soup))
-        if 'Analyst Report' in basic_information:
-            basic_information.pop('Analyst Report')
+        if "Analyst Report" in basic_information:
+            basic_information.pop("Analyst Report")
         return basic_information
 
     @_try
@@ -274,8 +282,10 @@ class ETFDBScraper:
             .find("div", {"id": "valuation"})
             .find_all("div", class_="row")
         )
-        values = [div.text for div in valuation[1].find_all("div", class_="text-center")]
-        return {values[0] : values[1]}
+        values = [
+            div.text for div in valuation[1].find_all("div", class_="text-center")
+        ]
+        return {values[0]: values[1]}
 
     @_try
     def dividends(self) -> dict:
@@ -307,7 +317,7 @@ class ETFDBScraper:
                     if category not in results:
                         results[category] = {}
 
-                    if data_th != 'Fund':
+                    if data_th != "Fund":
                         continue
                     results[category] = text
         return results
@@ -338,9 +348,9 @@ class ETFDBScraper:
             texts.update({"Url": holding_url})
             results.append(texts)
 
-        data['Statistics'] = self._number_of_holdings()
-        data['Allocation'] = self._asset_categories()
-        data['Holdings'] = results
+        data["Statistics"] = self._number_of_holdings()
+        data["Allocation"] = self._asset_categories()
+        data["Holdings"] = results
         return data
 
     @_try
@@ -408,15 +418,15 @@ class ETFDBScraper:
     @_try
     def exposure(self):
         soup = self._make_soup_request("charts")
-        charts_data = soup.find_all('table',class_='chart base-table')
+        charts_data = soup.find_all("table", class_="chart base-table")
         if not charts_data:
-            return {"Data" : "Region, country, sector breakdown data not found"}
+            return {"Data": "Region, country, sector breakdown data not found"}
 
         parse_data = []
-        chart_series = [x.get('data-chart-series') for x in charts_data]
-        chart_titles = [x.get('data-title').replace('<br>', ' ') for x in charts_data]
+        chart_series = [x.get("data-chart-series") for x in charts_data]
+        chart_titles = [x.get("data-title").replace("<br>", " ") for x in charts_data]
         chart_series_dicts = [json.loads(series) for series in chart_series]
         for chart_dict in chart_series_dicts:
-            parse_data.append({x['name']: x['data'][0] for x in chart_dict})
+            parse_data.append({x["name"]: x["data"][0] for x in chart_dict})
 
         return dict(zip(chart_titles, parse_data))

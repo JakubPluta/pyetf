@@ -8,57 +8,67 @@ from requests import HTTPError
 class BaseClient:
     BASE_URI = "https://etfdb.com"
 
-    def __init__(self, number_of_pages = None, page_size: int = 500):
-        self.api_url = 'https://etfdb.com/api/screener/'
+    def __init__(self, number_of_pages=None, page_size: int = 500):
+        self.api_url = "https://etfdb.com/api/screener/"
         self.base_url = "https://etfdb.com"
-        self.headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0',
-                   'Accept': 'application/json'}
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0",
+            "Accept": "application/json",
+        }
 
-        self._post_json_data = {"tab": "returns", "page": 1, 'per_page' : page_size, "only": ["meta", "data", None]}
+        self._post_json_data = {
+            "tab": "returns",
+            "page": 1,
+            "per_page": page_size,
+            "only": ["meta", "data", None],
+        }
 
         try:
-            self._meta = self.get_metadata()['meta']
+            self._meta = self.get_metadata()["meta"]
         except (KeyError, HTTPError):
             self._meta = {}
 
-        self.total_pages = self._meta.get('total_pages')
+        self.total_pages = self._meta.get("total_pages")
         if number_of_pages:
             self.total_pages = number_of_pages
 
-        self.total_records = self._meta.get('total_records')
+        self.total_records = self._meta.get("total_records")
         self.page_size = page_size
 
         self._data = []
 
     def get_metadata(self):
-        return requests.post(self.api_url, json=self._post_json_data, headers=self.headers).json()
+        return requests.post(
+            self.api_url, json=self._post_json_data, headers=self.headers
+        ).json()
 
     def parse_etf_record(self, obj: dict):
         try:
             return {
-                'symbol': obj['symbol'].get('text'),
-                'name': obj['name'].get('text'),
-                'url': self.base_url + obj['symbol'].get('url'),
-                'one_week_return': obj.get('one_week_return'),
-                'one_year_return': obj.get('ytd'),
-                'three_year_return': obj.get('three_ytd'),
-                'five_year_return': obj.get('five_ytd'),
+                "symbol": obj["symbol"].get("text"),
+                "name": obj["name"].get("text"),
+                "url": self.base_url + obj["symbol"].get("url"),
+                "one_week_return": obj.get("one_week_return"),
+                "one_year_return": obj.get("ytd"),
+                "three_year_return": obj.get("three_ytd"),
+                "five_year_return": obj.get("five_ytd"),
             }
         except KeyError as e:
             print(e)
 
 
 class ETFDBClient(BaseClient):
-
     def scrape_etfs_from_single_page(self, page):
         time.sleep(5)
-        self._post_json_data['page'] = page
+        self._post_json_data["page"] = page
         print("Getting page ", page)
-        return requests.post(self.api_url, json=self._post_json_data, headers=self.headers).json()['data']
+        return requests.post(
+            self.api_url, json=self._post_json_data, headers=self.headers
+        ).json()["data"]
 
     def scrape_etfs(self):
         results = []
-        for page in range(1, self.total_pages+1):
+        for page in range(1, self.total_pages + 1):
             etfs = self.scrape_etfs_from_single_page(page)
             print("Number of etfs ", len(etfs))
             results += self.prepare_list_of_etfs(etfs)
@@ -74,25 +84,32 @@ class AsyncETFDBClient(BaseClient):
 
     BASE_URI = "https://etfdb.com"
 
-    def __init__(self, number_of_pages = None, page_size: int = 25):
-        super().__init__(number_of_pages,page_size)
-        self.api_url = 'https://etfdb.com/api/screener/'
+    def __init__(self, number_of_pages=None, page_size: int = 25):
+        super().__init__(number_of_pages, page_size)
+        self.api_url = "https://etfdb.com/api/screener/"
         self.base_url = "https://etfdb.com"
-        self.headers = {'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0',
-                   'Accept': 'application/json'}
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0",
+            "Accept": "application/json",
+        }
 
-        self._post_json_data = {"tab": "returns", "page": 1, 'per_page' : page_size, "only": ["meta", "data", None]}
+        self._post_json_data = {
+            "tab": "returns",
+            "page": 1,
+            "per_page": page_size,
+            "only": ["meta", "data", None],
+        }
 
         try:
-            self._meta = self.get_metadata()['meta']
+            self._meta = self.get_metadata()["meta"]
         except (KeyError, HTTPError):
             self._meta = {}
 
-        self.total_pages = self._meta.get('total_pages')
+        self.total_pages = self._meta.get("total_pages")
         if number_of_pages:
             self.total_pages = number_of_pages
 
-        self.total_records = self._meta.get('total_records')
+        self.total_records = self._meta.get("total_records")
         self.page_size = page_size
 
     def run(self):
@@ -104,11 +121,13 @@ class AsyncETFDBClient(BaseClient):
 
     async def scrape_etfs_from_single_page(self, session, page):
         try:
-            self._post_json_data['page'] = page
+            self._post_json_data["page"] = page
             time.sleep(1)
-            async with session.post(self.api_url, json=self._post_json_data, headers=self.headers) as response:
+            async with session.post(
+                self.api_url, json=self._post_json_data, headers=self.headers
+            ) as response:
                 data = await response.json()
-                results = await self.prepare_list_of_etfs(data['data'])
+                results = await self.prepare_list_of_etfs(data["data"])
                 return results
         except requests.exceptions.ConnectionError as e:
             print(e)
@@ -119,13 +138,13 @@ class AsyncETFDBClient(BaseClient):
     async def parse_etf_record(self, obj: dict):
         try:
             return {
-                'symbol': obj['symbol'].get('text'),
-                'name': obj['name'].get('text'),
-                'url': self.base_url + obj['symbol'].get('url'),
-                'one_week_return': obj.get('one_week_return'),
-                'one_year_return': obj.get('ytd'),
-                'three_year_return': obj.get('three_ytd'),
-                'five_year_return': obj.get('five_ytd'),
+                "symbol": obj["symbol"].get("text"),
+                "name": obj["name"].get("text"),
+                "url": self.base_url + obj["symbol"].get("url"),
+                "one_week_return": obj.get("one_week_return"),
+                "one_year_return": obj.get("ytd"),
+                "three_year_return": obj.get("three_ytd"),
+                "five_year_return": obj.get("five_ytd"),
             }
         except KeyError as e:
             print(e)

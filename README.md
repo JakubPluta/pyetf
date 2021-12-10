@@ -4,7 +4,18 @@ pyetf is a Python library for dealing extracting ETF data from etfdb.com.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install pyetf.
+```bash
+# clone repository
+git clone https://github.com/JakubPluta/pyetf.git
+```
+```bash
+# navigate to cloned project and create virtual environment
+python -m venv env 
+```
+```bash
+# activate virtual environment
+source env/Scripts/activate
+```
 
 ```bash
 # install poetry

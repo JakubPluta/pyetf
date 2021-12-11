@@ -23,12 +23,7 @@ def _try(func):
     return inner
 
 
-def retry_session(
-    retries=5,
-    backoff_factor=0.5,
-    session=None,
-    *mounts
-):
+def retry_session(retries=5, backoff_factor=0.5, session=None, *mounts):
     session = session or requests.Session()
     retry = Retry(
         total=retries,
@@ -37,8 +32,8 @@ def retry_session(
         backoff_factor=backoff_factor,
     )
     adapter = HTTPAdapter(max_retries=retry)
-    session.mount('http://', adapter)
-    session.mount('https://', adapter)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
     if mounts:
         for m in mounts:
             session.mount(m, adapter)

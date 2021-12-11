@@ -24,10 +24,12 @@ class BaseClient:
         self.session = retry_session()
         self.api_url = "https://etfdb.com/api/screener/"
         self.base_url = "https://etfdb.com"
-        self.session.headers.update({
-            "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0",
-            "Accept": "application/json",
-        })
+        self.session.headers.update(
+            {
+                "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0",
+                "Accept": "application/json",
+            }
+        )
 
         self._post_json_data = {
             "tab": "returns",
@@ -205,16 +207,6 @@ class ETFDBScraper:
     """etfdb scraper client"""
 
     BASE_URL = "https://etfdb.com"
-    CATEGORIES = {
-        "profile": "#etf-ticker-profile",
-        "valuation": "#etf-ticker-valuation-dividend",
-        "expense": "#expense",
-        "holdings": "#holdings",
-        "performance": "#performance",
-        "technicals": "#technicals",
-        "rating": "#realtime-rating",
-        "charts": "#charts",
-    }
 
     def __init__(self, ticker: str):
         self.session = retry_session()
@@ -223,58 +215,43 @@ class ETFDBScraper:
             self._ticker_scraped_data = tickers.get(self.ticker)
 
             self.ticker_data = {
-                'name' : self._ticker_scraped_data.get('name'),
-                'symbol' : self._ticker_scraped_data.get('symbol'),
-                'url' : self._ticker_scraped_data.get('url'),
+                "name": self._ticker_scraped_data.get("name"),
+                "symbol": self._ticker_scraped_data.get("symbol"),
+                "url": self._ticker_scraped_data.get("url"),
             }
         else:
             raise InvalidETFException(f"{ticker} doesn't exist in ETF Database\n")
 
-    def _prepare_url(self, category=None) -> str:
-        """Builds url for given category and ticker.
+        try:
+            self.soup = self._make_soup_request()
+        except Exception as e:
+            raise HTTPError(f"Couldn't load data for {self.ticker}") from e
 
-        Parameters
-        ----------
-        category: str
-            One from list ["profile", "valuation", "expense", "holdings", "performance", "technicals", "rating"]
+    def _prepare_url(self,) -> str:
+        """Builds url for given ticker."""
 
-        Returns
-        -------
-        str: prepared url for request.
-        """
-
-        url = f"{self.BASE_URL}/etf/{self.ticker}/"
-        if category and category in self.CATEGORIES:
-            url += self.CATEGORIES.get(category)
-        return url
+        return f"{self.BASE_URL}/etf/{self.ticker}/"
 
     @functools.lru_cache(maxsize=128)
-    def _make_soup_request(self, category: str) -> bs4.BeautifulSoup:
+    def _make_soup_request(self) -> bs4.BeautifulSoup:
         """Make GET request to etfdb.com, and put response into BeautifulSoup data structure.
-
-        Parameters
-        ----------
-        category: str
-            One from list ["profile", "valuation", "expense", "holdings", "performance", "technicals", "rating"]
 
         Returns
         -------
         BeautifulSoup object ready to parse with bs4 library
         """
 
-        url = self._prepare_url(category)
+        url = self._prepare_url()
         response = self.session.get(url)
         return bs4.BeautifulSoup(response.text, "html.parser")
 
     @_try
-    def _get_profile_container(self, soup: bs4.BeautifulSoup = None) -> dict:
+    def _get_profile_container(self) -> dict:
         """Parse profile-container div into dictionary with base statistics."""
 
-        if not soup:
-            soup = self._make_soup_request("profile")
         profile_container = [
             x.find_all("span")
-            for x in soup.find("div", {"class": "profile-container"}).find_all(
+            for x in self.soup.find("div", {"class": "profile-container"}).find_all(
                 "div", class_="row"
             )
         ]
@@ -289,12 +266,9 @@ class ETFDBScraper:
         return {x: y for x, y in results}
 
     @_try
-    def _trading_data(self, soup: bs4.BeautifulSoup = None) -> dict:
+    def _trading_data(self) -> dict:
         """Get trading data"""
-
-        if not soup:
-            soup = self._make_soup_request("profile")
-        trading_data = soup.find(
+        trading_data = self.soup.find(
             "div", {"class": "data-trading bar-charts-table"}
         ).find_all("li")
         trading_dict = {
@@ -306,12 +280,10 @@ class ETFDBScraper:
         return {k: v for k, v in trading_dict.items() if v != ""}
 
     @_try
-    def _asset_categories(self, soup: bs4.BeautifulSoup = None) -> dict:
+    def _asset_categories(self) -> dict:
         """Get asset categories data"""
 
-        if not soup:
-            soup = self._make_soup_request("profile")
-        theme = soup.find("div", {"id": "etf-ticker-body"}).find_all(
+        theme = self.soup.find("div", {"id": "etf-ticker-body"}).find_all(
             "div", class_="ticker-assets"
         )
         if not theme or len(theme) < 1:
@@ -327,12 +299,10 @@ class ETFDBScraper:
         return theme_dict
 
     @_try
-    def _factset_classification(self, soup: bs4.BeautifulSoup = None) -> dict:
+    def _factset_classification(self) -> dict:
         """Get factset information"""
 
-        if not soup:
-            soup = self._make_soup_request("profile")
-        factset = soup.find("div", {"id": "factset-classification"}).find_all("li")
+        factset = self.soup.find("div", {"id": "factset-classification"}).find_all("li")
         factset_dict = {
             li.select_one(":nth-child(1)")
             .text.strip(): li.select_one(":nth-child(2)")
@@ -345,8 +315,7 @@ class ETFDBScraper:
     def _number_of_holdings(self) -> dict:
         """Get number of holdings for given etf"""
 
-        soup = self._make_soup_request("holdings")
-        holdings_table = soup.find("table", {"id": "holdings-table"}).find("tbody")
+        holdings_table = self.soup.find("table", {"id": "holdings-table"}).find("tbody")
         table_rows = [x.text.strip() for x in holdings_table.find_all("td")]
         results = {}
         for i in range(0, len(table_rows), 4):
@@ -357,8 +326,7 @@ class ETFDBScraper:
     def _size_locations(self) -> dict:
         """Get size allocations of holdings for given etf"""
 
-        soup = self._make_soup_request("holdings")
-        size_locations = soup.find("table", {"id": "size-table"}).find("tbody")
+        size_locations = self.soup.find("table", {"id": "size-table"}).find("tbody")
         table_rows = [x.text.strip() for x in size_locations.find_all("td")]
         results = {}
         for i in range(0, len(table_rows), 4):
@@ -368,10 +336,8 @@ class ETFDBScraper:
     @_try
     def _valuation(self) -> dict:
         """Get ETF valuation metrics."""
-
-        soup = self._make_soup_request("valuation")
         valuation = (
-            soup.find("div", {"id": "etf-ticker-valuation-dividend"})
+            self.soup.find("div", {"id": "etf-ticker-valuation-dividend"})
             .find("div", {"id": "valuation"})
             .find_all("div", class_="row")
         )
@@ -392,8 +358,9 @@ class ETFDBScraper:
             ETF basic information
         """
 
-        soup = self._make_soup_request("profile")
-        etf_ticker_body = soup.find("div", {"id": "etf-ticker-body"}).find("div", class_="row")
+        etf_ticker_body = self.soup.find("div", {"id": "etf-ticker-body"}).find(
+            "div", class_="row"
+        )
         basic_information = {}
 
         for row in etf_ticker_body.find_all("div", class_="row"):
@@ -413,22 +380,22 @@ class ETFDBScraper:
 
             basic_information.update({key: value_text})
 
-        basic_information.update(self._get_profile_container(soup))
+        basic_information.update(self._get_profile_container())
         basic_information.update(self._valuation())
-        basic_information.update(self._trading_data(soup))
-        basic_information.update(self._asset_categories(soup))
-        basic_information.update(self._factset_classification(soup))
-        if "Analyst Report" in basic_information: basic_information.pop("Analyst Report")
+        basic_information.update(self._trading_data())
+        basic_information.update(self._asset_categories())
+        basic_information.update(self._factset_classification())
+        if "Analyst Report" in basic_information:
+            basic_information.pop("Analyst Report")
         return basic_information
 
     @_try
     def _dividends(self) -> dict:
         """Get ETF dividend information."""
 
-        soup = self._make_soup_request("valuation")
         results = {}
         dividend = (
-            soup.find("div", {"id": "etf-ticker-valuation-dividend"})
+            self.soup.find("div", {"id": "etf-ticker-valuation-dividend"})
             .find("div", {"id": "dividend"})
             .find("tbody")
         )
@@ -455,10 +422,9 @@ class ETFDBScraper:
         """Get ETF holdings information."""
 
         data = {}
-        soup = self._make_soup_request("holdings")
         results = []
         try:
-            tbody = soup.find("div", {"id": "holding_section"}).find("tbody")
+            tbody = self.soup.find("div", {"id": "holding_section"}).find("tbody")
             holdings = [x for x in tbody.find_all("tr")]
             for record in holdings:
                 record_texts = record.find_all("td")
@@ -482,9 +448,7 @@ class ETFDBScraper:
     @_try
     def _performance(self) -> dict:
         """Get ETF performance."""
-
-        soup = self._make_soup_request("performance")
-        performance = soup.find("div", {"id": "performance-collapse"}).find("tbody")
+        performance = self.soup.find("div", {"id": "performance-collapse"}).find("tbody")
         table_rows = [x.text.strip() for x in performance.find_all("td")]
         results = {}
         for i in range(0, len(table_rows), 4):
@@ -494,9 +458,7 @@ class ETFDBScraper:
     @_try
     def _realtime_rating(self) -> dict:
         """Get realtime ratings of ETF"""
-
-        soup = self._make_soup_request("rating")
-        ratings = soup.find("div", {"id": "realtime-collapse"}).find("table")
+        ratings = self.soup.find("div", {"id": "realtime-collapse"}).find("table")
         metrics = [x for x in ratings.find_all("tr")]
         results = {}
         for metric in metrics[2:]:
@@ -509,11 +471,9 @@ class ETFDBScraper:
     @_try
     def _technicals(self) -> dict:
         """Get technical analysis indicators for etf."""
-
-        soup = self._make_soup_request("technicals")
         sections = [
             x
-            for x in soup.find("div", {"id": "technicals-collapse"}).find_all(
+            for x in self.soup.find("div", {"id": "technicals-collapse"}).find_all(
                 "ul", class_="list-unstyled"
             )
         ]
@@ -528,11 +488,9 @@ class ETFDBScraper:
     @_try
     def _volatility(self):
         """Get Volatility  information."""
-
-        soup = self._make_soup_request("technicals")
         metrics = [
             x.text.strip()
-            for x in soup.find("div", {"id": "technicals-collapse"}).find_all(
+            for x in self.soup.find("div", {"id": "technicals-collapse"}).find_all(
                 "div", class_="row relative-metric-chart"
             )
         ]
@@ -547,9 +505,7 @@ class ETFDBScraper:
     @_try
     def _exposure(self) -> dict:
         """Get ETF exposure information."""
-
-        soup = self._make_soup_request("charts")
-        charts_data = soup.find_all("table", class_="chart base-table")
+        charts_data = self.soup.find_all("table", class_="chart base-table")
         if not charts_data:
             return {"Data": "Region, country, sector breakdown data not found"}
 
@@ -567,5 +523,5 @@ def scrape_etfs(page_size=250, save=False, **kwargs):
     client = ETFDBClient(page_size=page_size)
     etfs = client.scrape_etfs()
     if save:
-        utils.dump_json(etfs, 'data.json')
+        utils.dump_json(etfs, "data.json")
     return etfs

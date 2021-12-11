@@ -61,4 +61,3 @@ def load_etf(ticker: str) -> ETF:
 def get_raw_etf_dict(ticker: str) -> dict:
     etf = load_etf(ticker)
     return etf.to_dict()
-

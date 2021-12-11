@@ -17,10 +17,12 @@ python -m venv env
 source env/Scripts/activate
 ```
 
-```bash
+```python
 # install poetry
 pip install poetry
+```
 
+```python
 # install packages
 poetry install
 ```
@@ -110,6 +112,16 @@ print(vwo.technicals)
          'Williams % Range 10 Day': '19.32',
          'Williams % Range 20 Day': '59.31'
     }
+
+```python 
+# additional script to scrape all etfs from etfdb
+from pyetf._clients import scrape_etfs
+etfs = scrape_etfs(page_size=250)
+
+# if you want to dump etfs to json file:
+scrape_etfs(page_size=250, save=True)
+# data will be saved to data.json file on your current directory
+```
 
 
 ## Contributing

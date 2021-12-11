@@ -8,6 +8,8 @@ import os
 
 import bs4
 import requests
+
+import utils
 from pyetf.utils import _try, retry_session
 
 
@@ -22,10 +24,10 @@ class BaseClient:
         self.session = retry_session()
         self.api_url = "https://etfdb.com/api/screener/"
         self.base_url = "https://etfdb.com"
-        self.headers = {
+        self.session.headers.update({
             "User-Agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:77.0) Gecko/20100101 Firefox/77.0",
             "Accept": "application/json",
-        }
+        })
 
         self._post_json_data = {
             "tab": "returns",
@@ -50,7 +52,7 @@ class BaseClient:
 
     def get_metadata(self):
         return self.session.post(
-            self.api_url, json=self._post_json_data, headers=self.headers
+            self.api_url, json=self._post_json_data, timeout=10
         ).json()
 
     def parse_etf_record(self, obj: dict):
@@ -73,9 +75,17 @@ class ETFDBClient(BaseClient):
         time.sleep(5)
         self._post_json_data["page"] = page
         print("Getting page ", page)
-        return self.session.post(
-            self.api_url, json=self._post_json_data, headers=self.headers
-        ).json()["data"]
+
+        try:
+            data = self.session.post(
+                self.api_url, json=self._post_json_data, timeout=15
+            ).json()["data"]
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as e:
+            data = self.session.post(
+                self.api_url, json=self._post_json_data, timeout=15
+            ).json()["data"]
+
+        return data
 
     def scrape_etfs(self):
         results = []
@@ -551,3 +561,11 @@ class ETFDBScraper:
             parse_data.append({x["name"]: x["data"][0] for x in chart_dict})
 
         return dict(zip(chart_titles, parse_data))
+
+
+def scrape_etfs(page_size=250, save=False, **kwargs):
+    client = ETFDBClient(page_size=page_size)
+    etfs = client.scrape_etfs()
+    if save:
+        utils.dump_json(etfs, 'data.json')
+    return etfs

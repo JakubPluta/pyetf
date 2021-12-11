@@ -24,9 +24,8 @@ def _try(func):
 
 
 def retry_session(
-    retries=4,
-    backoff_factor=0.3,
-    status_forcelist=(500, 502, 504),
+    retries=5,
+    backoff_factor=0.5,
     session=None,
     *mounts
 ):
@@ -36,7 +35,6 @@ def retry_session(
         read=retries,
         connect=retries,
         backoff_factor=backoff_factor,
-        status_forcelist=status_forcelist,
     )
     adapter = HTTPAdapter(max_retries=retry)
     session.mount('http://', adapter)

@@ -1,11 +1,12 @@
 from setuptools import setup
 from setuptools import find_packages
+
 import pyetf.etfdb
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="pyetf",
+    name="pyetfdb",
     version="0.1.0",
     author="Jakub Pluta",
     author_email="plutakuba@gmail.com",

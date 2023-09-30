@@ -1,9 +1,6 @@
-from pyetf._clients import ETFDBScraper, tickers, InvalidETFException
-from pyetf.utils import get_class_property_methods
+from pyetf.etf import ETFDBClient
 
 
-def list_etfs():
-    return list(tickers.keys())
 
 
 class ETF(ETFDBScraper):

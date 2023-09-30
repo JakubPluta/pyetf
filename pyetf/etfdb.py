@@ -1,9 +1,8 @@
-from pyetf.etf import ETFDBClient
+from pyetf._etfdb_client import ETFDBClient
+from pyetf.utils import get_class_property_methods
 
 
-
-
-class ETF(ETFDBScraper):
+class ETF(ETFDBClient):
     """ETF Client"""
 
     def __init__(self, ticker: str):
@@ -30,10 +29,6 @@ class ETF(ETFDBScraper):
         return self._technicals()
 
     @property
-    def ratings(self):
-        return self._realtime_rating()
-
-    @property
     def performance(self):
         return self._performance()
 
@@ -48,13 +43,4 @@ class ETF(ETFDBScraper):
             data[m.title()] = getattr(self, m)
         return data
 
-
-def load_etf(ticker: str) -> ETF:
-    if ticker.upper() not in tickers:
-        raise InvalidETFException(f"{ticker} doesn't exist in ETF Database\n")
-    return ETF(ticker.upper())
-
-
-def get_raw_etf_dict(ticker: str) -> dict:
-    etf = load_etf(ticker)
-    return etf.to_dict()
+__all__ = ["ETF"]

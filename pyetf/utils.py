@@ -1,3 +1,4 @@
+import inspect
 from typing import Dict, Any, Optional, Tuple
 import bs4
 import requests
@@ -106,3 +107,12 @@ def handle_tbody_thead(soup, table_id: str, tag = "table"):
         size_key = row.pop(0)
         results[size_key] = dict(zip(header, row))
     return results
+
+
+def get_class_property_methods(cls):
+    props = []
+    for x in inspect.getmembers(cls):
+        if isinstance(x[1], property):
+            props.append(x[0])
+    return props
+

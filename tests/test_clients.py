@@ -1,7 +1,7 @@
 import bs4
 import pytest
 
-from pyetf._clients import ETFDBScraper
+from etfpy._clients import ETFDBScraper
 from unittest import mock
 
 

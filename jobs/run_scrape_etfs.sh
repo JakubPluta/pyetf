@@ -1,1 +1,1 @@
-python "jobs\scrape_etfs.py"
+python "etfpy\scripts\scrape_etfs.py"

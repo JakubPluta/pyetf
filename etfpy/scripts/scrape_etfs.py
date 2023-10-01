@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 
-from pyetf.clients.etfdb_scraper import get_all_etfs
+from etfpy.clients.etfdb_scraper import get_all_etfs
 
 
 ETFS_DATA_PATH = os.path.join(Path(__file__).parent.parent, "data", "etfs")

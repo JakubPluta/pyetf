@@ -13,9 +13,12 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 packages = [
-    { include = "pyetf" },
-    { include = "pyetf/**/*.py" },
-    { include = "pyetf/*.py" },
+    { include = "etfpy" },
+    { include = "etfpy/**/*.py" },
+    { include = "etfpy/*.py" },
+    { include = "data"},
+    { include = "data/**"},
+    { include = "data/etfs/etfs_list.json"},
 ]
 
 [tool.poetry.dependencies]

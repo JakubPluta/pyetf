@@ -1,8 +1,8 @@
 from typing import List, Any, Dict, Generator
 import itertools
 from requests.exceptions import ConnectionError, Timeout
-from pyetf.clients._client import BaseClient
-from pyetf.log import get_logger
+from etfpy.clients._client import BaseClient
+from etfpy.log import get_logger
 
 
 logger = get_logger(__name__)

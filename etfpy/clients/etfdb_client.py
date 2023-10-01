@@ -7,11 +7,11 @@ from typing import Tuple, List
 import re
 import bs4
 
-from pyetf.clients._client import BaseClient
-from pyetf.exc import InvalidETFException
+from etfpy.clients._client import BaseClient
+from etfpy.exc import InvalidETFException
 
-from pyetf.log import get_logger
-from pyetf.utils import (
+from etfpy.log import get_logger
+from etfpy.utils import (
     _handle_spans,
     handle_find_all_rows,
     chunkify,

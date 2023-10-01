@@ -1,5 +1,5 @@
-from pyetf.clients.etfdb_client import ETFDBClient
-from pyetf.utils import get_class_property_methods
+from etfpy.clients.etfdb_client import ETFDBClient
+from etfpy.utils import get_class_property_methods
 
 
 class ETF(ETFDBClient):

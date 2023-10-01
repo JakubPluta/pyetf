@@ -2,8 +2,8 @@ from typing import Any, Dict
 import requests
 from requests import HTTPError
 
-from pyetf.utils import get_retry_session, get_headers
-from pyetf.log import get_logger
+from etfpy.utils import get_retry_session, get_headers
+from etfpy.log import get_logger
 
 
 logger = get_logger(__name__)

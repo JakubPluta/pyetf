@@ -6,7 +6,7 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 from random_user_agent.user_agent import UserAgent
 from random_user_agent.params import SoftwareName, OperatingSystem
-from pyetf.log import get_logger
+from etfpy.log import get_logger
 
 
 logger = get_logger(__name__)

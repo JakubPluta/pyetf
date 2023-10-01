@@ -1,16 +1,16 @@
 # etfpy
 
-pyetf is a Python library for dealing extracting ETF data from etfdb.com.
+etfpy is a Python library for dealing with extraction ETF data from etfdb.com.
 
 ## Installation
 
-* Install with pip as a package [pip](https://pypi.org/project/pyetfdb/0.1.0/)
+* Install with pip as a package [pip](https://pypi.org/project/etfpy)
 ```
 pip install etfpy
 ```
 
 ```
-from etfpy import etfdb
+from etfpy import ETF, load_etf
 ```
 
 
@@ -41,18 +41,19 @@ poetry install
 ## Usage
 
 ```python
-from pyetf import etfdb
-
+from etfpy import ETF, load_etf, get_available_etfs_list
+import pprint
 # returns list of available ETFs.
-etfs = etfdb.list_etfs()
+etfs = get_available_etfs_list()
 
 # load etf
-vwo = etfdb.load_etf('VWO')
+vwo = load_etf('VWO')
+spy = ETF("SPY")
 ```
 
 ```python
 # get basic ETF information
-print(vwo.info)
+pprint.pprint(vwo.info)
 ```
     {
          '52 Week Hi': '$55.78',
@@ -84,10 +85,11 @@ print(vwo.info)
          'Weighting Scheme': 'Market Cap'
      }
 
-
 ```python
 # technical analysis metrics
-print(vwo.technicals)
+import pprint
+
+pprint.pprint(vwo.technicals)
 ```
 
     {
@@ -126,12 +128,10 @@ print(vwo.technicals)
 
 ```python
 # additional script to scrape all etfs from etfdb
-from pyetf._clients import scrape_etfs
-etfs = scrape_etfs(page_size=250)
+from etfpy.clients.etfdb_scraper import get_all_etfs
 
-# if you want to dump etfs to json file:
-scrape_etfs(page_size=250, save=True)
-# data will be saved to data.json file on your current directory
+etfs = get_all_etfs(page_size=250)
+
 ```
 
 

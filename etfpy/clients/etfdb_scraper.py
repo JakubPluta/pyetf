@@ -24,7 +24,7 @@ class ETFListScraper(BaseClient):
         The base URL for the ETFDB API.
     _api_url: str
         The URL for the ETFDB screener API.
-    _session: requests.Session
+    _request_session: requests.Session
         A session object used to make all requests.
     _timeout: int
         The timeout in seconds for all requests.

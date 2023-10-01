@@ -72,7 +72,7 @@ class ETFDBClient(BaseClient):
         """
 
         url = self._prepare_url()
-        response = self.session.get(url)
+        response = self._session.get(url)
         if response.status_code != 200:
             raise Exception(f"response {response.status_code}: {response.reason}")
         return bs4.BeautifulSoup(response.text, "html.parser")

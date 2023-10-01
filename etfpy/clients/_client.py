@@ -23,7 +23,7 @@ class BaseClient:
         The base URL for the etfdb API.
     _api_url: str
         The URL for the etfdb screener API.
-    _session: requests.Session
+    _request_session: requests.Session
         A session object used to make all requests.
     """
 
@@ -31,15 +31,15 @@ class BaseClient:
         self._base_url = "https://etfdb.com"
         self._api_url = f"{self._base_url}/api/screener/"
 
-        self._session = get_retry_session()
+        self._requests_session = get_retry_session()
 
         for k, v in kwargs.items():
             setattr(self, k, v)
 
     @property
-    def session(self) -> requests.Session:
+    def _session(self) -> requests.Session:
         """Returns the request session object."""
-        return self._session
+        return self._requests_session
 
     @staticmethod
     def _prepare_request_body(
@@ -91,7 +91,7 @@ class BaseClient:
         requests.Response
             The response object.
         """
-        return self.session.post(
+        return self._session.post(
             self._api_url, json=request_body, headers=get_headers()
         )
 

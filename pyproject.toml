@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pyetfdb"
+name = "etfpy"
 license = "MIT"
 version = "1.0.0"
 authors = ["Jakub Pluta"]

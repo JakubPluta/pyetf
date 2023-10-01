@@ -1,4 +1,4 @@
-# pyetf
+# etfpy
 
 pyetf is a Python library for dealing extracting ETF data from etfdb.com.
 
@@ -6,11 +6,11 @@ pyetf is a Python library for dealing extracting ETF data from etfdb.com.
 
 * Install with pip as a package [pip](https://pypi.org/project/pyetfdb/0.1.0/)
 ```
-pip install pyetfdb
+pip install etfpy
 ```
 
 ```
-from pyetf import etfdb
+from etfpy import etfdb
 ```
 
 

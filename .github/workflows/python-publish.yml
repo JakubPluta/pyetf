@@ -1,6 +1,6 @@
 name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
 
-on: push
+on: release
 
 jobs:
   build:
@@ -49,7 +49,7 @@ jobs:
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
 
-  test:
+  bump-version:
       runs-on: ubuntu-latest
       steps:
         - name: Cancel Previous Runs

@@ -2,3 +2,4 @@
 *.h text=auto
 *.cpp text=auto
 *.txt text=auto
+*.html linguist-detectable=false

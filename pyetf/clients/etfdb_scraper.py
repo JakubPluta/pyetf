@@ -1,7 +1,7 @@
 from typing import List, Any, Dict, Generator
 import itertools
 from requests.exceptions import ConnectionError, Timeout
-from pyetf._client import BaseClient
+from pyetf.clients._client import BaseClient
 from pyetf.log import get_logger
 
 

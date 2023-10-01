@@ -1,4 +1,4 @@
-from pyetf._etfdb_client import ETFDBClient
+from pyetf.clients.etfdb_client import ETFDBClient
 from pyetf.utils import get_class_property_methods
 
 

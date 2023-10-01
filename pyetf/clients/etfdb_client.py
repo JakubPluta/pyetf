@@ -7,7 +7,7 @@ from typing import Tuple, List
 import re
 import bs4
 
-from pyetf._client import BaseClient
+from pyetf.clients._client import BaseClient
 from pyetf.exc import InvalidETFException
 
 from pyetf.log import get_logger

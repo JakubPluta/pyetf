@@ -16,25 +16,21 @@ packages = [
     { include = "etfpy" },
     { include = "etfpy/**/*.py" },
     { include = "etfpy/*.py" },
-    { include = "data/etfs/etfs_list.json"},
+    { include = "etfpy/data/etfs/etfs_list.json"},
 ]
-
 [tool.poetry.dependencies]
-python = "^3.9"
-pandas = "^2.1.0"
-bs4 = "^0.0.1"
-pathlib = "^1.0.1"
+python = "^3.10"
 random-user-agent = "^1.0.1"
-pylint = "^2.17.7"
+bs4 = "^0.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^7.4.1"
-black = "^23.7.0"
-pre-commit = "^3.4.0"
-pylint = "^2.17.7"
+black = "^23.9.1"
+pytest = "^7.4.2"
 pytest-cov = "^4.1.0"
+pre-commit = "^3.4.0"
 isort = "^5.12.0"
+pylint = "^2.17.7"
 
 [build-system]
 requires = ["setuptools<65.5.0", "poetry-core>=1.0.0"]

@@ -1,9 +1,9 @@
-import itertools
-
-from pyetf.client import BaseClient
-from requests.exceptions import ConnectionError, Timeout
-from pyetf.log import get_logger
 from typing import List, Any, Dict, Generator
+import itertools
+from requests.exceptions import ConnectionError, Timeout
+from pyetf._client import BaseClient
+from pyetf.log import get_logger
+
 
 logger = get_logger(__name__)
 
@@ -98,14 +98,14 @@ class ETFListScraper(BaseClient):
             If the request times out.
 
         """
-        logger.debug(f"getting data for page: {page} with page_size: {page_size}")
+        logger.debug("getting data for page: %s with page_size: %s", page, page_size)
         request_body = self._prepare_request_body(page=page, page_size=page_size)
         try:
             return self.post_request(request_body).json()["data"]
         except (ConnectionError, Timeout) as e:
-            logger.error(f"connection timeout: {str(e)}")
-        except (AttributeError, KeyError) as ake:
-            logger.error(f"another exception happened: {str(ake)}")
+            logger.error("connection timeout: %s", str(e))
+        except (AttributeError, KeyError) as e:
+            logger.error("another exception happened: %s", str(e))
         return []
 
     def get_etfs(

@@ -534,27 +534,27 @@ Tikkanen <2.11.16>
         // Ads with 1x1 size are used to roadblock interstitial in some occasions
         // If that is the case, we don't want to show the modal
         if (event.size[0] === 1 && event.size[1] === 1) return;
-  
+
         // Don't want to bombard users with too many popups do so we are delaying the newsletter
         // modal popup if the interstitial ad is being served up. The newsletter popup will popup
         // in within the next two pages visits however once the popup_domination_icount cookie gets
         // reset again.
-  
+
         document.cookie = 'popup_domination_icount=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         if(typeof window.newsletterPopupTimeout !== 'undefined'){
           clearTimeout(window.newsletterPopupTimeout);
         }
-  
+
         $('#interstitial-modal').modal();
       }
     }
   };
-  
+
   _html = document.documentElement;
   _html.addEventListener('mouseleave', handleMouseleave);
-  
+
   popup = true;
-  
+
   function handleMouseleave(e) {
     // https://github.com/carlsednaoui/ouibounce#sensitivity
     // https://github.com/carlsednaoui/ouibounce/blob/2af8e1d882916b7c8bc20c86e714bde736f36b81/build/ouibounce.js#L53
@@ -563,9 +563,9 @@ Tikkanen <2.11.16>
     // the more quickly the event will fire. This will also limit the the mouseleave event to the top
     // off the users browser.
     if(e.clientY > 20) { return; }
-  
+
     if(popup === false) { return; }
-  
+
     if(popup) {
       defer(function(){
         if(popup) {
@@ -576,15 +576,15 @@ Tikkanen <2.11.16>
         popup = false;
       });
     }
-  
+
   };
-  
+
   // This will not live here but adding it here for now. - CM
   // Changed ID's to #exit-intent-modal - MC
   // Added functionality that will use the A3-5's width over the A1-11's
   exitIntentPostOnLoadFunction = function(event){
     if (event.isEmpty) {
-  
+
     } else if (event.size == null) {
       window.Mitre.debug('Null event size:');
       window.Mitre.debug(event);
@@ -592,7 +592,7 @@ Tikkanen <2.11.16>
       // Ads with 1x1 size are used to roadblock interstitial in some occasions
       // If that is the case, we don't want to show the modal
       if (event.size[0] === 1 && event.size[1] === 1) return;
-  
+
       if (event.slot.getSlotId().getDomId() === 'exit-intent-feature') {
         if(event.size[0] == 640) {
           exitIntentShowFullAd();
@@ -600,14 +600,14 @@ Tikkanen <2.11.16>
           exitIntentHideFullAd();
         }
       }
-  
+
       if (event.slot.getSlotId().getDomId() === 'exit-intent-leaderboard' || event.slot.getSlotId().getDomId() === 'exit-intent-feature') {
         if(event.size[0] > $('#exit-intent-modal .modal-dialog').width() ) {
           $('#exit-intent-modal .modal-dialog').attr('style', 'width: ' + (event.size[0] + 30) + 'px!important');
         }
-  
+
         $('#exit-intent-modal').modal();
-  
+
         if (typeof displayTracked == 'undefined') {
           displayTracked = true;
           Mitre.Analytics.trackEvent('Exit Interstitial', 'Impression', 'iShares 4Q15', undefined, true);
@@ -615,7 +615,7 @@ Tikkanen <2.11.16>
       }
     }
   };
-  
+
   // Adding tracking events
   allowedAds = {'exit-intent-feature':'Right', 'exit-intent-stacked':'Right Stacked', 'exit-intent-leaderboard':'Bottom'};
   exitIntentEvents = function(event){
@@ -629,7 +629,7 @@ Tikkanen <2.11.16>
       });
     }
   };
-  
+
   // Delay showing interstials and closing interstials
   interstitialDelay = function(interstitial){
     $(interstitial).on('show.bs.modal', function (e) {
@@ -639,7 +639,7 @@ Tikkanen <2.11.16>
       }, 2000);
     })
   };
-  
+
   exitIntentShowFullAd = function() {
     window.Mitre.debug('exitIntentShowFullAd');
     $('#exit-intent-modal .modal-header h4').hide();
@@ -647,7 +647,7 @@ Tikkanen <2.11.16>
     $('#exit-intent-modal .modal-body .ads').width('70%'); // for some reason 70% results in an actual 100% width
     $('#exit-intent-modal .modal-body .leaderboard').hide();
   };
-  
+
   exitIntentHideFullAd = function() {
     window.Mitre.debug('exitIntentHideFullAd');
     $('#exit-intent-modal .modal-header h4').show();
@@ -849,7 +849,7 @@ googletag.pubads().setTargeting('etf_remember_me', ["unknown"]);
           googletag.pubads().setTargeting('exchange_etf', getCookie('etf_xVv'));
           googletag.pubads().collapseEmptyDivs();
           googletag.pubads().setCentering(true);
-          
+
 
           googletag.pubads().addEventListener('slotRenderEnded', function(event) {postOnLoadFunction(event);});
 
@@ -946,18 +946,18 @@ googletag.pubads().addEventListener('slotRenderEnded',function(event){if(!event.
 <div id="append_header" data-dfp-unit-remove-iframe="true" data-dfp-unit="append_header" data-dfp-unit-served="{ &quot;append&quot;: &quot;&lt;script&gt;window.preventFixHeaderArea = true;&lt;/script&gt;&quot; }"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'append_header').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A30-6"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div id="prepend_body" data-dfp-unit-remove-iframe="true" data-dfp-unit="prepend_body"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'prepend_body').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A30-7"]).addService(googletag.pubads());
 
-      
+
     });</script>
 
 <div id="ad-slot-14046-9d83ef" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-9d83ef"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-9d83ef').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A30-8"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <script src="./Vanguard Total International Stock ETF_files/flip-logo-f0c2e5668fb7bd37fb920c4015857436f193c7d28d87246a25eb760e258769a6.js.pobrane"></script>
 <div class="mm-header-wrapper">
@@ -1021,7 +1021,7 @@ googletag.pubads().addEventListener('slotRenderEnded',function(event){if(!event.
 <li class="nav-item dropdown"><a href="https://etfdb.com/etfdb-categories/" title="Channels" class=" dropdown-toggle" data-toggle="dropdown">Channels<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 108px;"></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/active-etf-channel" title="Active ETF">Active ETF</a></li><li><a href="https://etfdb.com/tactical-allocation-channel/" title="Beyond Basic Beta">Beyond Basic Beta</a></li><li><a href="https://etfdb.com/china-insights-channel/" title="China Insights">China Insights</a></li><li><a href="https://etfdb.com/core-strategies-channel/" title="Core Strategies">Core Strategies</a></li><li><a href="https://etfdb.com/crypto-channel/" title="Crypto">Crypto</a></li><li><a href="https://etfdb.com/disruptive-technology-channel/" title="Disruptive Technology">Disruptive Technology</a></li><li><a href="https://etfdb.com/dividend-channel/" title="Dividend">Dividend</a></li><li><a href="https://etfdb.com/entrepreneur-etf-channel/" title="Entrepreneur ETF">Entrepreneur ETF</a></li><li><a href="https://etfdb.com/energy-infrastructure-channel/" title="Energy Infrastructure">Energy Infrastructure</a></li><li><a href="https://etfdb.com/equity-etf-channel/" title="Equity ETF ">Equity ETF </a></li><li><a href="https://etfdb.com/esg-channel" title="ESG">ESG</a></li><li><a href="https://etfdb.com/etf-building-blocks-channel/" title="ETF Building Blocks">ETF Building Blocks</a></li></ul></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/etf-education-channel" title="ETF Education ">ETF Education </a></li><li><a href="https://etfdb.com/fixed-income-channel/" title="Fixed Income">Fixed Income</a></li><li><a href="https://etfdb.com/future-etfs-channel/" title="Future ETFs">Future ETFs</a></li><li><a href="https://etfdb.com/gold-silver-investing-channel" title="Gold &amp; Silver Investing ">Gold &amp; Silver Investing </a></li><li><a href="https://etfdb.com/innovative-etfs-channel/" title="Innovative ETFs">Innovative ETFs</a></li><li><a href="https://etfdb.com/leveraged-inverse-channel/" title="Leveraged &amp; Inverse">Leveraged &amp; Inverse</a></li><li><a href="https://etfdb.com/model-portfolio-channel/" title="Model Portfolio">Model Portfolio</a></li><li><a href="https://etfdb.com/multi-asset-channel/" title="Multi-Asset">Multi-Asset</a></li><li><a href="https://etfdb.com/multi-factor-channel" title="Multi-Factor ">Multi-Factor </a></li><li><a href="https://etfdb.com/nasdaq-portfolio-solutions-channel/" title="Nasdaq Investment Intelligence">Nasdaq Investment Intelligence</a></li><li><a href="https://etfdb.com/portfolio-strategies-channel/" title="Portfolio Strategies">Portfolio Strategies</a></li><li><a href="https://etfdb.com/retirement-income-channel/" title="Retirement Income">Retirement Income</a></li><li><a href="https://etfdb.com/smart-beta-channel/" title="Smart Beta">Smart Beta</a></li><li><a href="https://etfdb.com/thematic-investing-channel/" title="Thematic Investing">Thematic Investing</a></li></ul></div></div></div></li><li class="nav-item"><a href="https://etfdb.com/etfs/" title="Database">Database</a></li><li class="nav-item dropdown"><a href="https://etfdb.com/tools/" title="Tools" class=" dropdown-toggle" data-toggle="dropdown">Tools<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 83px;"></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/screener/" title="ETF Screener">ETF Screener</a></li><li><a href="https://etfdb.com/tool/etf-country-exposure-tool/" title="ETF Country Exposure Tool">ETF Country Exposure Tool</a></li><li class=" us-only hidden"><div class="nav-ad-container"><div class="link" style="padding-right: 0px;"><a href="https://ad.wsod.com/click/096d329769ec8eaad23c01b62833ed4a/1546.0.img.1x1/" title="ETF Sector Tracker Tool" class=" us-only hidden" rel="nofollow" target="_blank">ETF Sector Tracker Tool</a></div><div class=" us-only hidden hidden-xs hidden-sm" style="padding-left: 0px; padding-right: 0px;"><div class="nav-ad"><div id="ad-slot-212687" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-212687"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-212687').setTargeting('uri', ["/etf/VXUS"]).setTargeting('slot_name', ["A21-1"]).addService(googletag.pubads());
 
-      
+
     });</script></div></div></div></li><li><a href="https://etfdb.com/etfdb-categories/" title="ETF Database Categories">ETF Database Categories</a></li></ul></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/tool/etf-comparison/" title="Head-To-Head ETF Comparison Tool">Head-To-Head ETF Comparison Tool</a></li><li><a href="https://etfdb.com/tool/etf-stock-exposure-tool/" title="ETF Stock Exposure Tool">ETF Stock Exposure Tool</a></li><li><a href="https://etfdb.com/etf-fund-flows/" title="ETF Issuer Fund Flows">ETF Issuer Fund Flows</a></li><li><a href="https://etfdb.com/indexes/" title="Indexes">Indexes</a></li></ul></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/tool/mutual-fund-to-etf/" title="Mutual Fund To ETF Converter">Mutual Fund To ETF Converter</a></li><li><a href="https://etfdb.com/etf-data-for-journalists/" title="ETF Data for Journalists">ETF Data for Journalists</a></li><li><a href="https://etfnerds.com/" title="ETF Nerds">ETF Nerds</a></li></ul></div></div></div></li><li class="nav-item dropdown"><a href="https://etfdb.com/etf-education/" title="Research" class=" dropdown-toggle" data-toggle="dropdown">Research<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 108px;"></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://www.etftrends.com/crypto-channel/the-race-to-the-first-bitcoin-etf/" title="First Bitcoin ETF">First Bitcoin ETF</a></li><li><a href="https://etfdb.com/etf-education/" title="ETF Education">ETF Education</a></li><li><a href="https://etfdb.com/etfs/asset-class/equity/" title="Equity Investing">Equity Investing</a></li><li><a href="https://etfdb.com/etfs/investment-style/dividend-etfs/" title="Dividend ETFs">Dividend ETFs</a></li></ul></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/etfs/leveraged/equity/" title="Leveraged ETFs">Leveraged ETFs</a></li><li><a href="https://etfdb.com/etfs/inverse/equity/" title="Inverse ETFs">Inverse ETFs</a></li></ul></div><div class="col-sm-4 col-md-4 col-lg-4"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/etfs/sector/" title="Top ETF Sectors">Top ETF Sectors</a></li><li><a href="https://etfdb.com/etfs/issuers/" title="Top ETF Issuers">Top ETF Issuers</a></li><li><a href="https://etfdb.com/etfs/industry/" title="Top ETF Industries">Top ETF Industries</a></li></ul></div></div></div></li><li class="nav-item dropdown"><a href="https://www.etftrends.com/webcasts/?utm_source=ETFdb-Navigation&amp;utm_medium=nav&amp;utm_campaign=webcasts" title="Webcasts" class=" dropdown-toggle" data-toggle="dropdown">Webcasts<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 111px;"></div><div class="col-sm-12 col-md-12 col-lg-12"><ul class="multi-column-dropdown"><li><a href="https://www.etftrends.com/webcasts/etfs-future-forward-2021-an-ishares-investing-symposium/?partnerref=etfdb-nav" title="ETFs Future-Forward 2021: An iShares Investing Symposium" target="_blank">ETFs Future-Forward 2021: An iShares Investing Symposium</a></li><li><a href="https://www.etftrends.com/webcasts/three-themes-for-2021-an-ishares-and-msci-investing-symposium/?partnerref=etfdb-nav" title="Three Themes for 2021: An iShares &amp; MSCI Investing Symposium" target="_blank">Three Themes for 2021: An iShares &amp; MSCI Investing Symposium</a></li></ul></div></div></div></li><li class="nav-item dropdown"><a href="https://etfdb.com/etfdb-categories/" title="Themes" class=" dropdown-toggle" data-toggle="dropdown">Themes<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 100px;"></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/themes/artificial-intelligence-etfs/" title="AI ETFs">AI ETFs</a></li><li><a href="https://etfdb.com/themes/blockchain-etfs/" title="Blockchain ETFs">Blockchain ETFs</a></li><li><a href="https://etfdb.com/themes/" title="See all Thematic Investing ETF themes">See all Thematic Investing ETF themes</a></li></ul></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/esg-investing/" title="ESG Investing">ESG Investing</a></li><li><a href="https://etfdb.com/themes/marijuana-etfs/" title="Marijuana ETFs">Marijuana ETFs</a></li></ul></div></div></div></li><li class="nav-item dropdown"><a title="Videos &amp; Podcasts" class=" dropdown-toggle" data-toggle="dropdown">Videos &amp; Podcasts<span class="caret"></span></a><div class="dropdown-menu multi-columns"><div class="row"><div class="dropdown-menu-top-bar" style="width: 170px;"></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://www.etftrends.com/etf-360-channel/" title="ETF 360 Video Series">ETF 360 Video Series</a></li><li><a href="https://www.etftrends.com/category/video/" title="ETF Trends on Videos">ETF Trends on Videos</a></li><li><a href="https://www.etftrends.com/category/podcasts/" title="ETF Trends on Podcasts">ETF Trends on Podcasts</a></li></ul></div><div class="col-sm-6 col-md-6 col-lg-6"><ul class="multi-column-dropdown"><li><a href="https://etfdb.com/etf-prime/" title="ETF Prime Podcast">ETF Prime Podcast</a></li></ul></div></div></div></li>
 
 </ul>
@@ -1103,13 +1103,13 @@ Pro Tools
 <div id="left-wing"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[120, 600], [160, 600], [300, 250], [300, 350], [300, 600], [300, 1050]], 'left-wing').defineSizeMapping(leftOutOfContentMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-3"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="ad-is-fixed" data-dfp-unit-height-gt-manipulation="{&quot;html&quot;:&quot;&quot;}" data-dfp-unit-height-gt="250" data-dfp-unit-height-lt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003evar ads_shown = ads_shown || []; if(ads_shown[&#39;A1-4&#39;] == true){ googletag.cmd.push(function() { Mitre.AdRefresher.refresh({ slot_name: [&#39;A1-4&#39;], visible: false, delay: false });});} else { googletag.cmd.push(function() {googletag.display(&#39;left-wing-stacked&#39;); }); ads_shown[&#39;A1-4&#39;] = true; }\u003c/script\u003e&quot;}" data-dfp-unit-height-lt="251" data-dfp-unit="left-wing" dfp_unit_not_served="{&quot;html&quot;:&quot;&quot;}" id="left-wing-stacked">
 <div id="left-wing-stacked"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250]], 'left-wing-stacked').defineSizeMapping(leftStackedOutOfContentMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-4"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -1117,13 +1117,13 @@ Pro Tools
 <div id="right-wing"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[120, 600], [160, 600], [300, 250], [300, 350], [300, 600], [300, 1050]], 'right-wing').defineSizeMapping(rightOutOfContentMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-5"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="ad-is-fixed" data-dfp-unit-height-gt-manipulation="{&quot;html&quot;:&quot;&quot;}" data-dfp-unit-height-gt="250" data-dfp-unit-height-lt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003evar ads_shown = ads_shown || []; if(ads_shown[&#39;A1-6&#39;] == true){ googletag.cmd.push(function() { Mitre.AdRefresher.refresh({ slot_name: [&#39;A1-6&#39;], visible: false, delay: false });});} else { googletag.cmd.push(function() {googletag.display(&#39;right-wing-stacked&#39;); }); ads_shown[&#39;A1-6&#39;] = true; }\u003c/script\u003e&quot;}" data-dfp-unit-height-lt="251" data-dfp-unit="right-wing" dfp_unit_not_served="{&quot;html&quot;:&quot;&quot;}" id="right-wing-stacked">
 <div id="right-wing-stacked"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250]], 'right-wing-stacked').defineSizeMapping(rightStackedOutOfContentMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-6"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -1137,7 +1137,7 @@ Pro Tools
 <div id="ad-slot-14046-9bb748" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-9bb748"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-9bb748').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-1"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="row">
 <div class="col-md-12">
@@ -1339,7 +1339,7 @@ Data Lineage &amp; Disclosures
 <div id="top-leaderboard" class="ad-cls-section"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250], [728, 90]], 'top-leaderboard').defineSizeMapping(inContentLeaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-1"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="spacing-md hidden-xs"></div>
 </div>
@@ -1572,10 +1572,10 @@ Analyst Report
         color: #333333; }
       .bar-charts-table table .rnnValue {
         text-align: right; }
-  
+
   .data-trading h3.heading {
     display: block; }
-  
+
   .data-trading h3 {
     display: none; }
 </style>
@@ -1648,7 +1648,7 @@ Analyst Report
 <div id="ad-slot-14046-955ceb" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-955ceb"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-955ceb').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-2"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 <div class="panel">
@@ -5654,23 +5654,23 @@ Disclosures
 <div id="ad-slot-14046-b71ef9" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-b71ef9" data-dfp-unit-true-served="{&quot;addClass&quot;:&quot;spacing-md&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[1, 1], [300, 350], [300, 600]], 'ad-slot-14046-b71ef9').defineSizeMapping(blockableRectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-10"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div id="ad-slot-14046-63096c" class="ad-cls-section" data-dfp-unit-remove-iframe-ask="true" data-dfp-unit="ad-slot-14046-b71ef9" data-dfp-unit-placeholder-override="{&quot;html&quot;:&quot;\u003cscript\u003egoogletag.cmd.push(function() { googletag.display(\&quot;ad-slot-14046-63096c\&quot;); });\u003c/script\u003e&quot;}" data-dfp-unit-not-served="{&quot;html&quot;:&quot;\u003cscript\u003evar ads_shown = ads_shown || []; ads_shown[\&quot;ad-slot-14046-63096c\&quot;] = false; document.getElementById(\&quot;ad-slot-14046-b71ef9\&quot;).dataset.roadblocked = \&quot;not served\&quot;;googletag.cmd.push(function() { googletag.display(\&quot;ad-slot-14046-63096c\&quot;); }); document.getElementById(\&quot;ad-slot-14046-b71ef9\&quot;).classList.add(\&quot;hidden\&quot;);\u003c/script\u003e&quot;}" data-dfp-unit-height-lt="2" data-dfp-unit-height-lt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003evar ads_shown = ads_shown || []; ads_shown[\&quot;ad-slot-14046-63096c\&quot;] = false; document.getElementById(\&quot;ad-slot-14046-b71ef9\&quot;).dataset.roadblocked = \&quot;true\&quot;;document.getElementById(\&quot;ad-slot-14046-b71ef9\&quot;).classList.add(\&quot;hidden\&quot;);googletag.cmd.push(function() { googletag.display(\&quot;ad-slot-14046-63096c\&quot;); });\u003c/script\u003e&quot;}" data-dfp-unit-height-gt="2" data-dfp-unit-height-gt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003evar ads_shown = ads_shown || []; ads_shown[\&quot;ad-slot-14046-63096c\&quot;] = true; document.getElementById(\&quot;ad-slot-14046-b71ef9\&quot;).dataset.roadblocked = \&quot;false\&quot;;\u003c/script\u003e&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 200], [300, 250], [120, 600], [160, 600], [300, 350], [300, 600]], 'ad-slot-14046-63096c').defineSizeMapping(rectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-1"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div dom_id="ad-slot-14046-47d010" data-dfp-unit="ad-slot-14046-63096c" data-dfp-unit-remove-iframe-ask="true" data-dfp-unit-served="{&quot;addClass&quot;:&quot;spacing-md&quot;}"></div>
 <div id="ad-slot-14046-6c4475" data-dfp-unit="ad-slot-14046-63096c" data-dfp-unit-placeholder-override="{&quot;html&quot;:&quot;\u003cscript\u003egoogletag.cmd.push(function() { googletag.display(\&quot;ad-slot-14046-6c4475\&quot;); });\u003c/script\u003e&quot;}" data-dfp-unit-height-lt="251" data-dfp-unit-height-lt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003e if(ads_shown[\&quot;ad-slot-14046-63096c\&quot;] == false){ googletag.cmd.push(function() { googletag.display(\&quot;ad-slot-14046-6c4475\&quot;); }); }\u003c/script\u003e&quot;}" data-dfp-unit-height-gt-manipulation="{&quot;html&quot;:&quot;&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250], [300, 300]], 'ad-slot-14046-6c4475').defineSizeMapping(stackedRectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-2"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div id="ad-slot-14046-9f2025" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-9f2025" data-dfp-unit-true-served="{&quot;css&quot;:[&quot;margin-top&quot;,&quot;20px&quot;]}"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-9f2025').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-14"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="spacing-md"></div>
 </div>
@@ -5680,7 +5680,7 @@ Disclosures
 <div id="ad-slot-14046-649c27" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-649c27"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-649c27').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-9"]).addService(googletag.pubads());
 
-      
+
     });</script>
 
 </div>
@@ -5688,14 +5688,14 @@ Disclosures
 <div id="ad-slot-14046-67e229" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-67e229"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-67e229').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-19"]).addService(googletag.pubads());
 
-      
+
     });</script>
 
 <div class="spacing-md"></div>
 <div id="ad-slot-14046-dc3f2e" class="ad"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 200], [300, 250], [120, 600], [160, 600], [300, 350], [300, 600]], 'ad-slot-14046-dc3f2e').defineSizeMapping(rectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-10"]).addService(googletag.pubads());
 
-      
+
     });</script>
 
 </div>
@@ -5710,7 +5710,7 @@ Disclosures
 <div id="middle-leader"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250], [728, 90]], 'middle-leader').defineSizeMapping(inContentLeaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-3"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -5719,7 +5719,7 @@ Disclosures
 <div id="a10-5-id" data-dfp-unit-remove-iframe="true" data-dfp-unit="a10-5-id" data-dfp-unit-served="{&quot;addClass&quot;:&quot;spacing-lg&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'a10-5-id').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A10-5"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -5728,7 +5728,7 @@ Disclosures
 <div id="ad-slot-14046-5420a0"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250], [728, 90], [970, 90], [970, 250], [1145, 273]], 'ad-slot-14046-5420a0').defineSizeMapping(leaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-7"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div class="spacing-lg"></div>
 </div>
@@ -5753,7 +5753,7 @@ Loading Articles...
 <div id="ad-slot-14046-f9c506" class="dont-overlap"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 250], [728, 90], [970, 90], [970, 250], [1145, 273]], 'ad-slot-14046-f9c506').defineSizeMapping(leaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-2"]).addService(googletag.pubads());
 
-      
+
     });</script>
 
 <div class="spacing-lg"></div>
@@ -5966,12 +5966,12 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
 <div id="interstitial-ad" data-dfp-unit="interstitial-ad" data-dfp-unit-height-lt="251" data-dfp-unit-height-lt-manipulation="{&quot;addClass&quot;:&quot;spacing-sm&quot;}" data-dfp-unit-height-gt="250" data-dfp-unit-height-gt-manipulation="{&quot;removeClass&quot;:&quot;spacing-sm&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_interstitial', [[300, 250], [300, 350], [300, 600], [120, 600], [160, 600], [640, 480]], 'interstitial-ad').defineSizeMapping(interstitialMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A9-1"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div id="stacked-interstitial-ad" data-dfp-unit="interstitial-ad" data-dfp-unit-height-lt="251" data-dfp-unit-height-lt-manipulation="{&quot;html&quot;:&quot;\u003cscript\u003egoogletag.cmd.push(function() { googletag.display(\&quot;stacked-interstitial-ad\&quot;); });\u003c/script\u003e&quot;}" data-dfp-unit-height-gt="250" data-dfp-unit-height-gt-manipulation="{&quot;html&quot;:&quot;&quot;}"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_interstitial', [[300, 250]], 'stacked-interstitial-ad').defineSizeMapping(stackedInterstitialMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A9-2"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 <div class="modal-footer">
@@ -5984,7 +5984,7 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
   $(function() {
     $('#interstitial-modal').on('hidden.bs.modal', function(e) { $(this).remove(); })
   });
-  
+
   interstitialDelay('#interstitial-modal');
 </script>
 
@@ -6037,7 +6037,7 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
 <div id="exit-intent-feature"><script>googletag.cmd.push(function() { googletag.display("exit-intent-feature"); });</script></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_interstitial', [[120, 600], [160, 600], [300, 250], [300, 350], [300, 600], [640, 480]], 'exit-intent-feature').defineSizeMapping(exitIntentRectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-11"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 <div class="spacing-md"></div>
@@ -6045,7 +6045,7 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
 <div id="exit-intent-stacked"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_interstitial', [[300, 250]], 'exit-intent-stacked').defineSizeMapping(exitIntentStackedRectangleMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A1-12"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -6056,7 +6056,7 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
 <div id="exit-intent-leaderboard"><script>googletag.cmd.push(function() { googletag.display("exit-intent-leaderboard"); });</script></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_interstitial', [[728, 90], [970, 90]], 'exit-intent-leaderboard').defineSizeMapping(exitIntentLeaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-5"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 </div>
@@ -6086,12 +6086,12 @@ Mitre.InfiniteScroll.init({"id":"14046","api":"targeted","tags":["etf","VXUS","v
 <div id="sticky-footer"></div> <script> googletag.cmd.push(function() {
       googletag.defineSlot('/21804333245/mitre_webpage', [[300, 50], [320, 50], [728, 90], [970, 90]], 'sticky-footer').defineSizeMapping(stickyLeaderboardMapping).setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-4"]).addService(googletag.pubads());
 
-      
+
     });</script>
 <div id="ad-slot-14046-c0fda7" data-dfp-unit-remove-iframe="true" data-dfp-unit="ad-slot-14046-c0fda7" data-dfp-unit-remove-iframe-again="true"></div> <script> googletag.cmd.push(function() {
       googletag.defineOutOfPageSlot('/21804333245/mitre_webpage', 'ad-slot-14046-c0fda7').setTargeting('uri', ["/etf/VXUS"]).setTargeting('tags', ["etf", "VXUS", "vanguard", "vxus-us-ftse-global-all-cap-ex-us-index", "foreign-large-cap-equities", "root", "asset-class", "equity", "size", "large-cap", "style", "blend", "region", "structure", "broad-asia", "broad", "investment-style", "socially-responsible", "dividend-frequency", "quarterly", "Denmark Exposure", "Canada Exposure", "Global Equities", "Equity", "Passive", "Sweden Exposure", "Italy Exposure", "Netherlands Exposure", "Blend Equity", "Broad Developed Markets", "China Exposure", "Blend", "Brazil Exposure", "United Kingdom Exposure", "Equity ETFs", "Consistent Growth", "France Exposure", "Vanguard", "Developed Markets", "Germany Exposure", "South Korea Exposure", "Large Cap", "Australia Exposure", "Currency Hedged", "Japan Exposure", "Rising Interest Rates", "Taiwan Exposure", "Spain Exposure", "Broad International", "Equity Asset Class", "South Africa Exposure", "ETF", "Large Cap Equity", "Hong Kong Exposure", "Switzerland Exposure", "India Exposure", "Long"]).setTargeting('slot_name', ["A3-8"]).addService(googletag.pubads());
 
-      
+
     });</script>
 </div>
 

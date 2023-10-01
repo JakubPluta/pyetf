@@ -21,7 +21,7 @@ git clone https://github.com/JakubPluta/pyetf.git
 ```
 ```bash
 # navigate to cloned project and create virtual environment
-python -m venv env 
+python -m venv env
 ```
 ```bash
 # activate virtual environment
@@ -124,7 +124,7 @@ print(vwo.technicals)
          'Williams % Range 20 Day': '59.31'
     }
 
-```python 
+```python
 # additional script to scrape all etfs from etfdb
 from pyetf._clients import scrape_etfs
 etfs = scrape_etfs(page_size=250)

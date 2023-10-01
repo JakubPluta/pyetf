@@ -43,4 +43,9 @@ class ETF(ETFDBClient):
             data[m.title()] = getattr(self, m)
         return data
 
-__all__ = ["ETF"]
+
+def load_etf(etf: str) -> ETF:
+    return ETF(etf)
+
+
+__all__ = ["ETF", "load_etf"]

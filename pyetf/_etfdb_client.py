@@ -1,7 +1,6 @@
 import functools
 import os
 import json
-import pprint
 from collections import defaultdict
 from pathlib import Path
 from typing import Tuple, List
@@ -16,14 +15,14 @@ from pyetf.utils import (
     _handle_spans,
     handle_find_all_rows,
     chunkify,
-    handle_tbody_thead, _handle_nth_child
-
+    handle_tbody_thead,
+    _handle_nth_child,
 )
 
 logger = get_logger(__name__)
 
 
-def load_available_etfs() -> list:
+def _load_available_etfs() -> list:
     """Loads all available tickers from etfdb.com
 
     Returns
@@ -39,14 +38,14 @@ def load_available_etfs() -> list:
 
 
 @functools.lru_cache()
-def etf_tickers_list():
-    return [etf["symbol"] for etf in load_available_etfs()]
+def get_available_etfs_list():
+    return [etf["symbol"] for etf in _load_available_etfs()]
 
 
 class ETFDBClient(BaseClient):
     def __init__(self, ticker: str, **kwargs):
         super().__init__(**kwargs)
-        if ticker.upper() in etf_tickers_list():
+        if ticker.upper() in get_available_etfs_list():
             self._ticker = ticker.upper()
             self._ticker_url = f"{self._base_url}/etf/{self._ticker}"
         else:
@@ -64,7 +63,8 @@ class ETFDBClient(BaseClient):
         return f"{self._base_url}/etf/{self._ticker}/"
 
     def _make_soup_request(self) -> bs4.BeautifulSoup:
-        """Make GET request to etfdb.com, and put response into BeautifulSoup data structure.
+        """Make GET request to etfdb.com, and put response
+        into BeautifulSoup data structure.
 
         Returns
         -------
@@ -176,12 +176,12 @@ class ETFDBClient(BaseClient):
         results = []
         try:
             tbody = self._soup.find("div", {"id": "holding_section"}).find("tbody")
-            holdings = [x for x in tbody.find_all("tr")]
+            holdings = list(tbody.find_all("tr"))
             for record in holdings:
                 record_texts = record.find_all("td")
                 try:
                     holding_url = self._base_url + record.find("a")["href"]
-                except TypeError as e:
+                except TypeError:
                     holding_url = ""
                 texts = dict(
                     zip(["Symbol", "Holding", "Share"], [x.text for x in record_texts])
@@ -202,12 +202,12 @@ class ETFDBClient(BaseClient):
 
     def _technicals(self) -> dict:
         """Get technical analysis indicators for etf."""
-        sections = [
-            x
-            for x in self._soup.find("div", {"id": "technicals-collapse"}).find_all(
+        sections = list(
+            self._soup.find("div", {"id": "technicals-collapse"}).find_all(
                 "ul", class_="list-unstyled"
             )
-        ]
+        )
+
         results = []
         for section in sections:
             try:
@@ -218,9 +218,12 @@ class ETFDBClient(BaseClient):
 
     def _volatility(self):
         """Get Volatility  information."""
-        metrics = [x.text.strip().split("\n\n\n\n") for x in self._soup.find("div", {"id": "technicals-collapse"}).find_all(
+        metrics = [
+            x.text.strip().split("\n\n\n\n")
+            for x in self._soup.find("div", {"id": "technicals-collapse"}).find_all(
                 "div", class_=re.compile("row relative-metric")
-            )]
+            )
+        ]
         return dict(metrics)
 
     def _exposure(self) -> dict:
@@ -241,7 +244,7 @@ class ETFDBClient(BaseClient):
         etf_ticker_body = self._soup.find("div", {"id": "etf-ticker-body"}).find(
             "div", class_="row"
         )
-        basic_information = {"Symbol" : self._ticker, "Url" :self._ticker_url}
+        basic_information = {"Symbol": self._ticker, "Url": self._ticker_url}
 
         for row in etf_ticker_body.find_all("div", class_="row"):
             key = _handle_nth_child(row, 1)

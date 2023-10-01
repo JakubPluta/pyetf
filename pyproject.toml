@@ -16,8 +16,6 @@ packages = [
     { include = "etfpy" },
     { include = "etfpy/**/*.py" },
     { include = "etfpy/*.py" },
-    { include = "data"},
-    { include = "data/**"},
     { include = "data/etfs/etfs_list.json"},
 ]
 

@@ -25,7 +25,8 @@ user_agent_rotator = UserAgent(
 def get_headers() -> Dict:
     return {
         "User-Agent": user_agent_rotator.get_random_user_agent(),
-        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate, br",
         "Connection": "keep-alive",
     }
@@ -60,7 +61,7 @@ def _handle_spans(spans) -> Optional[Tuple[Any]]:
         record = tuple(span.text.strip() for span in spans)
         return record[:2] if len(record) > 2 else record
     except Exception as e:
-        logger.debug(f"couldn't parse profile container {e}")
+        logger.debug("couldn't parse profile container %s", str(e))
     return None
 
 
@@ -88,7 +89,7 @@ def chunkify(lst, n):
         yield lst[i : i + n]
 
 
-def _get_tbody_thead(soup, table_id: str, tag = "table"):
+def _get_tbody_thead(soup, table_id: str, tag="table"):
     rows = [
         x.text.strip()
         for x in soup.find(tag, {"id": table_id}).find("tbody").find_all("td")
@@ -100,7 +101,7 @@ def _get_tbody_thead(soup, table_id: str, tag = "table"):
     return rows, thead[1:]
 
 
-def handle_tbody_thead(soup, table_id: str, tag = "table"):
+def handle_tbody_thead(soup, table_id: str, tag="table"):
     rows, header = _get_tbody_thead(soup, table_id, tag)
     results = {}
     for row in list(chunkify(rows, 4)):
@@ -115,4 +116,3 @@ def get_class_property_methods(cls):
         if isinstance(x[1], property):
             props.append(x[0])
     return props
-

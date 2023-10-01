@@ -27,7 +27,7 @@ def get_logger(name: Optional[str] = None, level: str = "DEBUG") -> logging.Logg
         "CRITICAL",
     ]:
         logger.warning(
-            f"invalid logging level: {level}, setting logging level to `DEBUG`"
+            "invalid logging level: %s, setting logging level to `DEBUG`", level
         )
     logger.setLevel(level=level)
     return logger

@@ -1,4 +1,4 @@
-name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
+name: Bump version and push
 
 on:
   push:
@@ -23,11 +23,13 @@ jobs:
   build:
     needs:
       - bump-version
-    name: Build distribution 📦
+    name: Build distribution
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
+    - run: |
+        git pull
     - name: Set up Python
       uses: actions/setup-python@v4
       with:

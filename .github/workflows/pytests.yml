@@ -52,5 +52,6 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
+          pip list
           pytest tests/
           coverage report

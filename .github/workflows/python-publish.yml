@@ -1,8 +1,25 @@
 name: Publish Python 🐍 distribution 📦 to PyPI and TestPyPI
 
-on: release
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+
 
 jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    name: Bump version and push tags to master
+    steps:
+      - name: Bump version
+        uses: Clinical-Genomics/bump2version-ci@v3
+        env:
+          BUMPVERSION_TOKEN: ${{ secrets.BUMPVERSION_TOKEN }}
+          BUMPVERSION_AUTHOR: JakubPluta
+          BUMPVERSION_EMAIL: plutakuba@gmail.com
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
   build:
     name: Build distribution 📦
     runs-on: ubuntu-latest
@@ -66,16 +83,4 @@ jobs:
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
 
-  bump-version:
-      runs-on: ubuntu-latest
-      steps:
-        - name: Cancel Previous Runs
-          uses: styfle/cancel-workflow-action@0.10.0
-          with:
-            access_token: ${{ secrets.GITHUB_TOKEN }}
-        - uses: 'actions/checkout@v3'
-        - name: Pull Request Version Bump
-          uses: fadi-quader-mox/pr-version-bump@v1.0.0
-          with:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

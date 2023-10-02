@@ -35,7 +35,8 @@ jobs:
           source .venv/bin/activate
           pip list
           pip install requests
-          pytest --cov=./ --cov-report=xml
+          pytest --cov=./ --cov-report=xml -vv -ss
+          echo "tests finished"
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:

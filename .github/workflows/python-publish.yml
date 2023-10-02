@@ -8,17 +8,17 @@ on:
 
 
 jobs:
-  bump-version:
-    runs-on: ubuntu-latest
-    name: Bump version and push tags to master
-    steps:
-      - name: Bump version
-        uses: Clinical-Genomics/bump2version-ci@v3
-        env:
-          BUMPVERSION_TOKEN: ${{ secrets.BUMPVERSION_TOKEN }}
-          BUMPVERSION_AUTHOR: JakubPluta
-          BUMPVERSION_EMAIL: plutakuba@gmail.com
-          GITHUB_REPOSITORY: ${{ github.repository }}
+#  bump-version:
+#    runs-on: ubuntu-latest
+#    name: Bump version and push tags to master
+#    steps:
+#      - name: Bump version
+#        uses: Clinical-Genomics/bump2version-ci@v3
+#        env:
+#          BUMPVERSION_TOKEN: ${{ secrets.BUMPVERSION_TOKEN }}
+#          BUMPVERSION_AUTHOR: JakubPluta
+#          BUMPVERSION_EMAIL: plutakuba@gmail.com
+#          GITHUB_REPOSITORY: ${{ github.repository }}
 
   build:
     name: Build distribution 📦

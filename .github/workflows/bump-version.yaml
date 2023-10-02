@@ -14,6 +14,6 @@ jobs:
         uses: Clinical-Genomics/bump2version-ci@v3
         env:
           BUMPVERSION_TOKEN: ${{ secrets.BUMPVERSION_TOKEN }}
-          BUMPVERSION_AUTHOR: ${{ secrets.BUMPVERSION_AUTHOR }}
-          BUMPVERSION_EMAIL: ${{ secrets.BUMPVERSION_EMAIL }}
+          BUMPVERSION_AUTHOR: JakubPluta
+          BUMPVERSION_EMAIL: plutakuba@gmail.com
           GITHUB_REPOSITORY: ${{ github.repository }}

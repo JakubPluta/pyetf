@@ -1,22 +1,22 @@
 import functools
-import os
 import json
+import os
+import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Tuple, List
-import re
+from typing import List, Tuple
+
 import bs4
 
-from etfpy.clients._client import BaseClient
+from etfpy.client._base_client import BaseClient
 from etfpy.exc import InvalidETFException
-
 from etfpy.log import get_logger
 from etfpy.utils import (
-    _handle_spans,
-    handle_find_all_rows,
-    chunkify,
-    handle_tbody_thead,
     _handle_nth_child,
+    _handle_spans,
+    chunkify,
+    handle_find_all_rows,
+    handle_tbody_thead,
 )
 
 logger = get_logger(__name__)
@@ -70,7 +70,7 @@ class ETFDBClient(BaseClient):
         -------
         BeautifulSoup object ready to parse with bs4 library
         """
-
+        print(">>>>>>>>>>>>>>>>>>>> Inside mock")
         url = self._prepare_url()
         response = self._session.get(url)
         if response.status_code != 200:
@@ -109,10 +109,7 @@ class ETFDBClient(BaseClient):
             "div", {"class": "data-trading bar-charts-table"}
         ).find_all("li")
         trading_dict = {
-            li.select_one(":nth-child(1)")
-            .text.strip(): li.select_one(":nth-child(2)")
-            .text.strip()
-            for li in trading_data
+            _handle_nth_child(li, 1): _handle_nth_child(li, 2) for li in trading_data
         }
         return {k: v for k, v in trading_dict.items() if v != ""}
 
@@ -180,7 +177,7 @@ class ETFDBClient(BaseClient):
             for record in holdings:
                 record_texts = record.find_all("td")
                 try:
-                    holding_url = self._base_url + record.find("a")["href"]
+                    holding_url = record.find("a")["href"]
                 except TypeError:
                     holding_url = ""
                 texts = dict(
@@ -252,7 +249,11 @@ class ETFDBClient(BaseClient):
             try:
                 href = value.find("a")["href"]
                 if href and key != "ETF Home Page":
-                    value_text = self._base_url + href
+                    value_text = (
+                        href
+                        if href.startswith(self._base_url)
+                        else self._base_url + href
+                    )
                 else:
                     value_text = href
             except (KeyError, TypeError):

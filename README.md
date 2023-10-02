@@ -128,7 +128,7 @@ pprint.pprint(vwo.technicals)
 
 ```python
 # additional script to scrape all etfs from etfdb
-from etfpy.clients.etfdb_scraper import get_all_etfs
+from etfpy.client.etfdb_scraper import get_all_etfs
 
 etfs = get_all_etfs(page_size=250)
 

@@ -1,10 +1,10 @@
 from typing import Any, Dict
+
 import requests
 from requests import HTTPError
 
-from etfpy.utils import get_retry_session, get_headers
 from etfpy.log import get_logger
-
+from etfpy.utils import get_headers, get_retry_session
 
 logger = get_logger(__name__)
 

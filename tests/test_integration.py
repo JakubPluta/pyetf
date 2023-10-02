@@ -1,30 +1,23 @@
 import os.path
+from pathlib import Path
+from unittest import mock
 
 import bs4
-import pytest
 
-from etfpy.clients.etfdb_client import ETFDBClient
-from unittest import mock
-from pathlib import Path
+from etfpy.client.etf_client import ETFDBClient
 
 here = Path(__file__).parent
 
 
-@pytest.fixture(scope="session")
-def soup():
+def soup(*args, **kwargs):
     with open(os.path.join(here, "jepy.html"), encoding="utf8") as f:
         data = bs4.BeautifulSoup(f, "html.parser")
     return data
 
 
-@pytest.fixture(scope="session")
-def etf():
-    return ETFDBClient("JEPY")
-
-
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_basic_info(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_basic_info():
+    etf = ETFDBClient("JEPY")
     assert etf._basic_info() == {
         "Symbol": "JEPY",
         "Url": "https://etfdb.com/etf/JEPY",
@@ -33,8 +26,8 @@ def test_basic_info(mocky, soup, etf):
         "Expense Ratio": "0.99%",
         "Inception": "Sep 18, 2023",
         "Index Tracked": "ACTIVE - No Index",
-        "Price:": "$19.61",
-        "Change:": "$0.1 (0.01%)",
+        "Price:": "$19.68",
+        "Change:": "$0.07 (0.36%)",
         "Category:": "n/a",
         "Last Updated:": "Sep 28, 2023",
         "P/E Ratio": {
@@ -42,6 +35,10 @@ def test_basic_info(mocky, soup, etf):
             "ETF Database Category Average": "N/A",
             "FactSet Segment Average": "5.86",
         },
+        "Open": "$19.83",
+        "Volume": "411,400",
+        "Day Lo": "$19.86",
+        "Day Hi": "$19.86",
         "52 Week Lo": "$19.33",
         "52 Week Hi": "$20.12",
         "AUM": "$0.0 M",
@@ -56,9 +53,9 @@ def test_basic_info(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_technicals(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_technicals():
+    etf = ETFDBClient("JEPY")
     assert etf._technicals() == {
         "20 Day MA": "n/a",
         "60 Day MA": "n/a",
@@ -94,9 +91,9 @@ def test_technicals(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_valuation(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_valuation():
+    etf = ETFDBClient("JEPY")
     assert etf._valuation()["P/E Ratio"] == {
         "ETF Database Category Average": "N/A",
         "FactSet Segment Average": "5.86",
@@ -104,9 +101,9 @@ def test_valuation(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_dividends(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_dividends():
+    etf = ETFDBClient("JEPY")
     assert etf._dividends() == {
         "Dividend": {
             "JEPY": "N/A",
@@ -131,9 +128,9 @@ def test_dividends(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_holdings(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_holdings():
+    etf = ETFDBClient("JEPY")
     assert etf._holdings() == {
         "Statistics": {
             "Number of Holdings": {
@@ -171,9 +168,9 @@ def test_holdings(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_number_of_holdings(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_number_of_holdings():
+    etf = ETFDBClient("JEPY")
     assert etf._number_of_holdings() == {
         "Number of Holdings": {
             "JEPY": "3",
@@ -198,9 +195,9 @@ def test_number_of_holdings(mocky, soup, etf):
     }
 
 
-@mock.patch("etfpy.clients.etfdb_client.ETFDBClient._make_soup_request")
-def test_performance(mocky, soup, etf):
-    mocky.return_value = soup
+@mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
+def test_performance():
+    etf = ETFDBClient("JEPY")
     assert etf._performance() == {
         "1 Month Return": {
             "JEPY": "-1.96%",

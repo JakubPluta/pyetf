@@ -1,9 +1,10 @@
-from typing import List, Any, Dict, Generator
 import itertools
-from requests.exceptions import ConnectionError, Timeout
-from etfpy.clients._client import BaseClient
-from etfpy.log import get_logger
+from typing import Any, Dict, Generator, List
 
+from requests.exceptions import ConnectionError, Timeout
+
+from etfpy.client._base_client import BaseClient
+from etfpy.log import get_logger
 
 logger = get_logger(__name__)
 

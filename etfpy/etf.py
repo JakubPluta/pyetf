@@ -1,8 +1,8 @@
-from etfpy.clients.etfdb_client import ETFDBClient
+from etfpy.client.etf_client import ETFDBClient as _ETFDBClient
 from etfpy.utils import get_class_property_methods
 
 
-class ETF(ETFDBClient):
+class ETF(_ETFDBClient):
     """ETF Client"""
 
     def __init__(self, ticker: str):

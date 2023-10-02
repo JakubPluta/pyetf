@@ -18,6 +18,8 @@ jobs:
       - name: Install dependencies
         run: |
           poetry install
+          pip install requests
+          pip list
       - name: Test with pytest
         run: |
           poetry run coverage run -m pytest  -v -s

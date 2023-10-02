@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "etfpy"
 license = "MIT"
-version = "1.0.7"
+version = "1.0.8"
 authors = ["Jakub Pluta"]
 description = "ETF screening tool"
 readme = "README.md"

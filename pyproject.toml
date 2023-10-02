@@ -21,7 +21,6 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.10"
 random-user-agent = "^1.0.1"
-bs4 = "^0.0.1"
 beautifulsoup4 = "^4.12.2"
 
 

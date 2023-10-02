@@ -43,7 +43,7 @@ def test_should_handle_spans():
     assert _handle_spans(spans) == ("Price:", "$19.68")
 
     html = '[<div class="stock-quote-title">\nPrice:</div>]'
-    spans = bs4.BeautifulSoup(html).find_all("span")
+    spans = bs4.BeautifulSoup(html, "html.parser").find_all("span")
     assert _handle_spans(spans) == ()
 
 

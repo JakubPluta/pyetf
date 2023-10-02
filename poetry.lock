@@ -84,19 +84,6 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
-name = "bs4"
-version = "0.0.1"
-description = "Dummy package for Beautiful Soup"
-optional = false
-python-versions = "*"
-files = [
-    {file = "bs4-0.0.1.tar.gz", hash = "sha256:36ecea1fd7cc5c0c6e4a1ff075df26d50da647b75376626cc186e2212886dd3a"},
-]
-
-[package.dependencies]
-beautifulsoup4 = "*"
-
-[[package]]
 name = "bump2version"
 version = "1.0.1"
 description = "Version-bump your software with a single command!"
@@ -777,4 +764,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "aa20f96dbfa5cc8ff0d0b8694f29e8c69ad750f90753ac472359e8917cca7812"
+content-hash = "a697ebd4bafb9054eb87a6c12cd1eebc6681860d9f13cef2216e48e87c6b6009"

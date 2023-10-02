@@ -1,28 +1,19 @@
-name: Bump version workflow
-
+name: 'Bump2version-CI' # https://github.com/Clinical-Genomics/bump2version-ci
 on:
   push:
     branches:
-    - main
+      - 'master'
+      - 'main'
 
 jobs:
   bump-version:
-    name: Bump package version
-    if: "!contains(github.event.head_commit.message, 'Bump version')"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+    name: Bump version and push tags to master
     steps:
-    - name: actions/checkout
-      uses: actions/checkout@v2
-      with:
-          persist-credentials: false
-    - name: current_version
-      run: echo "current_version=$(grep '^version' pyproject.toml | cut -d ' ' -f3)" >> $GITHUB_ENV
-    - name: FragileTech/bump-version
-      uses: FragileTech/bump-version@main
-      with:
-        current_version: "${{ env.current_version }}"
-        files: pyproject.toml
-        commit_name: Your Company Bot
-        commit_email: bot@your-company.com
-        login: your-bot-login
-        token: "${{ secrets.BOT_TOKEN }}"
+      - name: Bump version
+        uses: Clinical-Genomics/bump2version-ci@v3
+        env:
+          BUMPVERSION_TOKEN: ${{ secrets.BUMPVERSION_TOKEN }}
+          BUMPVERSION_AUTHOR: ${{ secrets.BUMPVERSION_AUTHOR }}
+          BUMPVERSION_EMAIL: ${{ secrets.BUMPVERSION_EMAIL }}
+          GITHUB_REPOSITORY: ${{ github.repository }}

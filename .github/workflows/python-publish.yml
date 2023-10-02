@@ -21,6 +21,8 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
   build:
+    needs:
+      - bump-version
     name: Build distribution 📦
     runs-on: ubuntu-latest
 

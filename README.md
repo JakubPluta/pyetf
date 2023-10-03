@@ -6,13 +6,13 @@ including trading data, performance metrics, assets allocations end more.
 
 ## Installation
 
-* Install with pip as a package [pip](https://pypi.org/project/etfpy)
+### Install with pip as a package [pip](https://pypi.org/project/etfpy)
 ```
 pip install etfpy
 ```
 or
 
-* Clone repostiory
+### Clone repostiory
 ```bash
 # clone repository
 git clone https://github.com/JakubPluta/pyetf.git
@@ -140,6 +140,8 @@ poetry install
                        'SPY': '2023-09-15'}
         }
 
+
+# performance metrics
 >> spy.performance
 >> {
     '1 Month Return': {'ETF Database Category Average': '-2.89%',
@@ -162,6 +164,7 @@ poetry install
             'SPY': '13.02%'}
 }
 
+# volatility metrics
 >> spy.volatility
 >>  {
      '20 Day Volatility': '10.61%',
@@ -173,6 +176,17 @@ poetry install
 }
 
 ```
+
+If you want to scrape list of all etfs with some basic information in terminal use:
+```bash
+python etfpy/scripts/scrape_etfs.py
+or 
+bash jobs/run_scrape_etfs.sh
+or
+make scrape
+```
+Output data will be stored in `.\etfpy\data\etfs\etfs_list.json`
+
 
 
 ## Contributing

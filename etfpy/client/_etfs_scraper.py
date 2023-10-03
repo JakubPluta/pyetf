@@ -10,26 +10,8 @@ logger = get_logger(__name__)
 
 
 class ETFListScraper(BaseClient):
-    """Scrapes ETF data from the ETFDB API.
-
-    Parameters
-    ----------
-    timeout: Optional[int], default=7
-        The timeout in seconds for all requests.
-    kwargs: Any
-        Additional keyword arguments to pass to the client.
-
-    Attributes
-    ----------
-    _base_url: str
-        The base URL for the ETFDB API.
-    _api_url: str
-        The URL for the ETFDB screener API.
-    _request_session: requests.Session
-        A session object used to make all requests.
-    _timeout: int
-        The timeout in seconds for all requests.
-
+    """Scrapes ETF data from the ETFDB.
+    It"S a list of all available etfs in ETFDB
     """
 
     def _parse_etf_record(self, obj: dict) -> Dict[str, Any]:

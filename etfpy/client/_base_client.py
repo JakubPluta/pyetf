@@ -43,7 +43,7 @@ class BaseClient:
 
     @staticmethod
     def _prepare_request_body(
-        page: int = 1, per_page: int = 250, **kwargs: Any
+        page: int = 1, page_size: int = 250, **kwargs: Any
     ) -> Dict:
         """Prepares the request body for a screener request.
 
@@ -51,7 +51,7 @@ class BaseClient:
         ----------
         page: int, default=1
             The page number to request.
-        per_page: int, default=250
+        page_size: int, default=250
             The number of results per page to request.
         kwargs: Any
             Additional keyword arguments to pass to the request.
@@ -72,7 +72,7 @@ class BaseClient:
         body = {
             "tab": "returns",
             "page": page,
-            "per_page": per_page,
+            "per_page": page_size,
             "only": ["meta", "data", None],
         }
         body.update(**kwargs)

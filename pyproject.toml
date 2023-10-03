@@ -53,3 +53,29 @@ profile = "black"
 line_length = 79
 skip_gitignore = true
 combine_as_imports = true
+
+[tool.coverage.run]
+omit = [
+    "etfpy/scripts/*",
+    "etfpy/log.py",
+    "etfpy/exc.py"
+]
+
+[tool.coverage.report]
+exclude_also = [
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    "if self\\.debug",
+
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    "if __name__ == .__main__.:",
+
+    "@(abc\\.)?abstractmethod",
+    ]
+
+ignore_errors = true

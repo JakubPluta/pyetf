@@ -187,6 +187,20 @@ make scrape
 ```
 Output data will be stored in `.\etfpy\data\etfs\etfs_list.json`
 
+Run tests & check coverage 
+```bash
+# run all tests
+make test
+
+# pytest cov
+make cov
+```
+
+To lint
+```bash
+make pretty
+```
+
 
 
 ## Contributing

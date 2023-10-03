@@ -201,32 +201,32 @@ def test_performance():
     assert etf._performance() == {
         "1 Month Return": {
             "JEPY": "-1.96%",
-            "ETF Database\n\nCategory Average": "-1.38%",
-            "Factset Segment\n\nAverage": "-1.51%",
+            "ETF Database Category Average": "-1.38%",
+            "Factset Segment Average": "-1.51%",
         },
         "3 Month Return": {
             "JEPY": "-1.96%",
-            "ETF Database\n\nCategory Average": "-1.85%",
-            "Factset Segment\n\nAverage": "-0.99%",
+            "ETF Database Category Average": "-1.85%",
+            "Factset Segment Average": "-0.99%",
         },
         "YTD Return": {
             "JEPY": "N/A",
-            "ETF Database\n\nCategory Average": "3.13%",
-            "Factset Segment\n\nAverage": "6.94%",
+            "ETF Database Category Average": "3.13%",
+            "Factset Segment Average": "6.94%",
         },
         "1 Year Return": {
             "JEPY": "N/A",
-            "ETF Database\n\nCategory Average": "2.55%",
-            "Factset Segment\n\nAverage": "9.70%",
+            "ETF Database Category Average": "2.55%",
+            "Factset Segment Average": "9.70%",
         },
         "3 Year Return": {
             "JEPY": "N/A",
-            "ETF Database\n\nCategory Average": "0.09%",
-            "Factset Segment\n\nAverage": "4.35%",
+            "ETF Database Category Average": "0.09%",
+            "Factset Segment Average": "4.35%",
         },
         "5 Year Return": {
             "JEPY": "N/A",
-            "ETF Database\n\nCategory Average": "0.03%",
-            "Factset Segment\n\nAverage": "2.08%",
+            "ETF Database Category Average": "0.03%",
+            "Factset Segment Average": "2.08%",
         },
     }

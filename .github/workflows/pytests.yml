@@ -33,7 +33,6 @@ jobs:
       - name: Run tests
         run: |
           source .venv/bin/activate
-          pip list
           pip install requests
           pytest --cov=./ --cov-report=xml -vv -ss
           echo "tests finished"

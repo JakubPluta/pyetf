@@ -5,10 +5,10 @@ import requests.adapters
 
 from etfpy.utils import (
     _handle_spans,
+    chunkify,
     get_headers,
     get_retry_session,
     handle_find_all_rows,
-    chunkify,
 )
 
 

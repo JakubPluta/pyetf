@@ -70,7 +70,6 @@ class ETFDBClient(BaseClient):
         -------
         BeautifulSoup object ready to parse with bs4 library
         """
-        print(">>>>>>>>>>>>>>>>>>>> Inside mock")
         url = self._prepare_url()
         response = self._session.get(url)
         if response.status_code != 200:
@@ -195,7 +194,17 @@ class ETFDBClient(BaseClient):
 
     def _performance(self) -> dict:
         """Get ETF performance."""
-        return handle_tbody_thead(self._soup, "performance-collapse", tag="div")
+        performance = handle_tbody_thead(self._soup, "performance-collapse", tag="div")
+        cleaned_dict = {}
+        try:
+            for outer_key, _ in performance.items():
+                cleaned_dict[outer_key] = {}
+                for inner_key, inner_value in performance[outer_key].items():
+                    new_key = inner_key.replace("\n\n", " ")
+                    cleaned_dict[outer_key][new_key] = inner_value
+        except (KeyError, AttributeError) as kae:
+            logger.warning("couldn't clean performance dict %s", kae)
+        return cleaned_dict
 
     def _technicals(self) -> dict:
         """Get technical analysis indicators for etf."""
@@ -238,6 +247,9 @@ class ETFDBClient(BaseClient):
         return dict(zip(chart_titles, parse_data))
 
     def _basic_info(self):
+        """Gets basic information about ETF.
+        Like profile information, trading data, valuation, assets etc.
+        """
         etf_ticker_body = self._soup.find("div", {"id": "etf-ticker-body"}).find(
             "div", class_="row"
         )

@@ -131,41 +131,16 @@ def test_dividends():
 @mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)
 def test_holdings():
     etf = ETFDBClient("JEPY")
-    assert etf._holdings() == {
-        "Statistics": {
-            "Number of Holdings": {
-                "JEPY": "3",
-                "ETF Database Category Average": "N/A",
-                "FactSet Segment Average": "174",
-            },
-            "% of Assets in Top 10": {
-                "JEPY": "100.00%",
-                "ETF Database Category Average": "N/A",
-                "FactSet Segment Average": "58.76%",
-            },
-            "% of Assets in Top 15": {
-                "JEPY": "100.00%",
-                "ETF Database Category Average": "N/A",
-                "FactSet Segment Average": "63.43%",
-            },
-            "% of Assets in Top 50": {
-                "JEPY": "100.00%",
-                "ETF Database Category Average": "N/A",
-                "FactSet Segment Average": "80.52%",
-            },
+    assert etf._holdings() == [
+        {"Symbol": "N/A", "Holding": "U.S. Dollar", "Share": "98.89%", "Url": ""},
+        {
+            "Symbol": "FGXXX",
+            "Holding": "First American Funds Inc X Government Obligations Fund",
+            "Share": "1.35%",
+            "Url": "https://etfdb.com/stock/FGXXX/",
         },
-        "Allocation": {"Category": "n/a", "Asset Class": "Equity"},
-        "Holdings": [
-            {"Symbol": "N/A", "Holding": "U.S. Dollar", "Share": "98.89%", "Url": ""},
-            {
-                "Symbol": "FGXXX",
-                "Holding": "First American Funds Inc X Government Obligations Fund",
-                "Share": "1.35%",
-                "Url": "https://etfdb.com/stock/FGXXX/",
-            },
-            {"Symbol": "N/A", "Holding": "OPTIONS", "Share": "-0.24%", "Url": ""},
-        ],
-    }
+        {"Symbol": "N/A", "Holding": "OPTIONS", "Share": "-0.24%", "Url": ""},
+    ]
 
 
 @mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)

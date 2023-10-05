@@ -1,6 +1,9 @@
 # ETFpy
+[![codecov](https://codecov.io/gh/JakubPluta/pyetf/graph/badge.svg?token=736JAQGR1C)](https://codecov.io/gh/JakubPluta/pyetf)
+[![PyPI version](https://badge.fury.io/py/etfpy.svg)](https://badge.fury.io/py/etfpy)
+<a target="new" href="https://github.com/JakubPluta/pyetf"><img border=0 src="https://img.shields.io/github/stars/JakubPluta/pyetf.svg?style=social&label=Star&maxAge=60" alt="Star this repo"></a>
 
-ETFpy is a Python library that allows users to scrape data from etfdb.com, 
+**ETFpy** is a Python library that allows users to scrape data from etfdb.com, 
 a website that provides comprehensive information on ETFs, 
 including trading data, performance metrics, assets allocations end more. 
 
@@ -39,21 +42,21 @@ poetry install
 ## Usage
 
 ```python
->> from etfpy import ETF, load_etf, get_available_etfs_list
+>>> from etfpy import ETF, load_etf, get_available_etfs_list
 
 # returns list of available ETFs.
->> etfs = get_available_etfs_list()
->> etfs
->> ['SPY', 'IVV', 'VOO', 'VTI', 'QQQ', 'VEA', 'VTV', 'IEFA', 'BND', 'AGG', 'VUG', 'IJH', ... ]
+>>> etfs = get_available_etfs_list()
+>>> etfs
+>>> ['SPY', 'IVV', 'VOO', 'VTI', 'QQQ', 'VEA', 'VTV', 'IEFA', 'BND', 'AGG', 'VUG', 'IJH', ... ]
 
 # load etf
->> vwo = load_etf('VWO')
+>>> vwo = load_etf('VWO')
 # or
->> spy = ETF("SPY")
+>>> spy = ETF("SPY")
 
 # get basic ETF information
->> spy.info
->> {
+>>> spy.info
+>>> {
     '52 Week Hi': '$457.83',
     '52 Week Lo': '$342.72',
     'AUM': '$402,034.0 M',
@@ -88,8 +91,8 @@ poetry install
 }
 
 # technical analysis metrics
->> spy.technicals
->> {
+>>> spy.technicals
+>>> {
      '20 Day MA': '$50.45',
      '60 Day MA': '$50.74',
      'Average Spread ($)': '1.00',
@@ -124,8 +127,8 @@ poetry install
     }
 
 # dividends metrics
->> spy.dividends
->> {
+>>> spy.dividends
+>>> {
     'Annual Dividend Rate': {'ETF Database Category Average': '$ 0.95',
                       'FactSet Segment Average': '$ 0.63',
                       'SPY': '$ 6.51'},
@@ -142,8 +145,8 @@ poetry install
 
 
 # performance metrics
->> spy.performance
->> {
+>>> spy.performance
+>>> {
     '1 Month Return': {'ETF Database Category Average': '-2.89%',
                 'Factset Segment Average': '-2.07%',
                 'SPY': '-3.11%'},
@@ -165,8 +168,8 @@ poetry install
 }
 
 # volatility metrics
->> spy.volatility
->>  {
+>>> spy.volatility
+>>>  {
      '20 Day Volatility': '10.61%',
      '200 Day Volatility': '10.91%',
      '5 Day Volatility': '200.37%',
@@ -174,8 +177,19 @@ poetry install
      'Beta': '1.0',
      'Standard Deviation': '26.89%'
 }
-
 ```
+You can also wrap ETF object with pandas DataFrames, and work with the data in tabular form.
+You will have access to mostly the same methods as etf has, but as a result you will see DataFrame or Series.
+
+```python
+>>> from etfpy import ETF
+>>> spy = ETF("SPY")
+>>> spy_tabular = spy.to_tabular()
+```
+![img.png](assets/img.png)
+
+![img_1.png](assets/img_1.png)
+
 
 If you want to scrape list of all etfs with some basic information in terminal use:
 ```bash
@@ -200,7 +214,6 @@ To lint
 ```bash
 make pretty
 ```
-
 
 
 ## Contributing

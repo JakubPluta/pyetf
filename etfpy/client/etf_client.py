@@ -4,7 +4,7 @@ import os
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import bs4
 
@@ -19,7 +19,7 @@ from etfpy.utils import (
     handle_tbody_thead,
 )
 
-logger = get_logger(__name__)
+logger = get_logger("etf_client")
 
 
 def _load_available_etfs() -> list:
@@ -46,21 +46,29 @@ class ETFDBClient(BaseClient):
     def __init__(self, ticker: str, **kwargs):
         super().__init__(**kwargs)
         if ticker.upper() in get_available_etfs_list():
-            self._ticker = ticker.upper()
-            self._ticker_url = f"{self._base_url}/etf/{self._ticker}"
+            self.ticker = ticker.upper()
+            self.ticker_url = f"{self._base_url}/etf/{self.ticker}"
         else:
             raise InvalidETFException(f"{ticker} doesn't exist in ETF Database")
 
+        self.asset_class = self._add_meta_information(self.ticker)
         self._soup = self._make_soup_request()
 
+    @staticmethod
+    def _add_meta_information(ticker):
+        for etf in _load_available_etfs():
+            if etf.get("symbol") == ticker:
+                return etf.get("asset_class")
+        return None
+
     def __repr__(self):
-        return f"{self.__class__.__name__}(ticker={self._ticker})"
+        return f"{self.__class__.__name__}(ticker={self.ticker})"
 
     def _prepare_url(
         self,
     ) -> str:
         """Builds url for given ticker."""
-        return f"{self._base_url}/etf/{self._ticker}/"
+        return f"{self._base_url}/etf/{self.ticker}/"
 
     def _make_soup_request(self) -> bs4.BeautifulSoup:
         """Make GET request to etfdb.com, and put response
@@ -161,14 +169,12 @@ class ETFDBClient(BaseClient):
             results[k][name] = v
         return dict(results)
 
-    def _dividends(self) -> dict:
+    def _dividends(self) -> Dict:
         """Get ETF dividend information."""
         return handle_tbody_thead(self._soup, "dividend-table", tag="div")
 
-    def _holdings(self) -> dict:
+    def _holdings(self) -> List[Dict]:
         """Get ETF holdings information."""
-
-        data = {}
         results = []
         try:
             tbody = self._soup.find("div", {"id": "holding_section"}).find("tbody")
@@ -182,17 +188,20 @@ class ETFDBClient(BaseClient):
                 texts = dict(
                     zip(["Symbol", "Holding", "Share"], [x.text for x in record_texts])
                 )
-                texts.update({"Url": holding_url})
+                holding_url = (
+                    f"{self._base_url}{holding_url}"
+                    if self._base_url not in holding_url
+                    else holding_url
+                )
+                texts.update(
+                    {"Url": "" if holding_url == self._base_url else holding_url}
+                )
                 results.append(texts)
         except AttributeError:
             results = []
+        return results
 
-        data["Statistics"] = self._number_of_holdings()
-        data["Allocation"] = self._asset_categories()
-        data["Holdings"] = results
-        return data
-
-    def _performance(self) -> dict:
+    def _performance(self) -> Dict:
         """Get ETF performance."""
         performance = handle_tbody_thead(self._soup, "performance-collapse", tag="div")
         cleaned_dict = {}
@@ -206,7 +215,7 @@ class ETFDBClient(BaseClient):
             logger.warning("couldn't clean performance dict %s", kae)
         return cleaned_dict
 
-    def _technicals(self) -> dict:
+    def _technicals(self) -> Dict:
         """Get technical analysis indicators for etf."""
         sections = list(
             self._soup.find("div", {"id": "technicals-collapse"}).find_all(
@@ -222,7 +231,7 @@ class ETFDBClient(BaseClient):
                 logger.error(e)
         return dict(results)
 
-    def _volatility(self):
+    def _volatility(self) -> Dict:
         """Get Volatility  information."""
         metrics = [
             x.text.strip().split("\n\n\n\n")
@@ -232,7 +241,7 @@ class ETFDBClient(BaseClient):
         ]
         return dict(metrics)
 
-    def _exposure(self) -> dict:
+    def _exposure(self) -> Dict:
         """Get ETF exposure information."""
         charts_data = self._soup.find_all("table", class_="chart base-table")
         if not charts_data:
@@ -246,14 +255,14 @@ class ETFDBClient(BaseClient):
 
         return dict(zip(chart_titles, parse_data))
 
-    def _basic_info(self):
+    def _basic_info(self) -> Dict:
         """Gets basic information about ETF.
         Like profile information, trading data, valuation, assets etc.
         """
         etf_ticker_body = self._soup.find("div", {"id": "etf-ticker-body"}).find(
             "div", class_="row"
         )
-        basic_information = {"Symbol": self._ticker, "Url": self._ticker_url}
+        basic_information = {"Symbol": self.ticker, "Url": self.ticker_url}
 
         for row in etf_ticker_body.find_all("div", class_="row"):
             key = _handle_nth_child(row, 1)

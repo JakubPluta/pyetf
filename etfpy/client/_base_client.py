@@ -70,7 +70,6 @@ class BaseClient:
         if page < 1:
             raise ValueError("page param needs to be positive number")
         body = {
-            "tab": "returns",
             "page": page,
             "per_page": page_size,
             "only": ["meta", "data", None],

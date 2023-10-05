@@ -29,13 +29,11 @@ def test_has_session(client):
 
 def test_can_prepare_request_body(client):
     assert client._prepare_request_body() == {
-        "tab": "returns",
         "page": 1,
         "per_page": 250,
         "only": ["meta", "data", None],
     }
     assert client._prepare_request_body(5, 1000) == {
-        "tab": "returns",
         "page": 5,
         "per_page": 1000,
         "only": ["meta", "data", None],

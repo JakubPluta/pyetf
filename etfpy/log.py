@@ -12,6 +12,9 @@ LOGGING_FORMATTER = (
 )
 
 
+logging.getLogger("urllib3").propagate = False
+
+
 def get_logger(name: Optional[str] = None, level: str = "DEBUG") -> logging.Logger:
     """Returns Logger Instance with predefined formatting"""
     logger = logging.getLogger(name=name)

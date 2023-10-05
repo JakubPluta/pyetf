@@ -2,7 +2,7 @@ name: functional_test
 
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "30 17 * * *"
 
 jobs:
   test:

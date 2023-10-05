@@ -31,12 +31,12 @@ class ETFListScraper(BaseClient):
 
         return {
             "symbol": obj.get("symbol", {}).get("text"),
+            "asset_class": obj.get("asset_class"),
+            "price": obj.get("price"),
+            "average_volume": obj.get("average_volume"),
             "name": obj.get("name", {}).get("text"),
             "url": self._base_url + obj.get("symbol", {}).get("url"),
-            "one_week_return": obj.get("one_week_return"),
             "one_year_return": obj.get("ytd"),
-            "three_year_return": obj.get("three_ytd"),
-            "five_year_return": obj.get("five_ytd"),
         }
 
     def _prepare_etfs_list(

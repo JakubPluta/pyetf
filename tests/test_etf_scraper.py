@@ -194,10 +194,10 @@ def etf_dict():
     return {
         "symbol": {"text": "some_symbol", "url": "/some_url"},
         "name": {"text": "some_name"},
-        "one_week_return": "10%",
         "ytd": "10%",
-        "three_ytd": "10%",
-        "five_ytd": "10%",
+        "asset_class": "asset_class",
+        "price": "10",
+        "average_volume": "10",
     }
 
 
@@ -211,10 +211,10 @@ def test_can_parse_record(etf_scraper_client, etf_dict):
         "symbol": "some_symbol",
         "name": "some_name",
         "url": "https://etfdb.com/some_url",
-        "one_week_return": "10%",
         "one_year_return": "10%",
-        "three_year_return": "10%",
-        "five_year_return": "10%",
+        "price": "10",
+        "average_volume": "10",
+        "asset_class": "asset_class",
     }
 
 
@@ -224,10 +224,10 @@ def test_can_prepare_etfs_list(etf_scraper_client, etfs):
             "symbol": "some_symbol",
             "name": "some_name",
             "url": "https://etfdb.com/some_url",
-            "one_week_return": "10%",
             "one_year_return": "10%",
-            "three_year_return": "10%",
-            "five_year_return": "10%",
+            "price": "10",
+            "average_volume": "10",
+            "asset_class": "asset_class",
         }
         for _ in range(len(etfs))
     ]

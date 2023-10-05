@@ -302,3 +302,28 @@ def get_class_property_methods(cls):
         if isinstance(x[1], property):
             props.append(x[0])
     return props
+
+
+def convert_spaces_to_underscore_and_lowercase(data: dict):
+    """Converts spaces to underscores in all keys in a nested dictionary.
+
+    Args:
+        data: A nested dictionary.
+
+    Returns:
+        A nested dictionary with all spaces in keys converted to underscores.
+    """
+
+    def recurse(data):
+        if isinstance(data, dict):
+            return {k.replace(" ", "_").lower(): recurse(v) for k, v in data.items()}
+        return data
+
+    return recurse(data)
+
+
+def remove_nested_benchmarks(data: dict, ticker: str):
+    results = {}
+    for k, v in data.items():
+        results[k] = v.get(ticker) if isinstance(v, dict) else v
+    return results

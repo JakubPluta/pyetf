@@ -1,3 +1,4 @@
+from etfpy.analytics.tabular_etf import etf_to_tabular_wrapper
 from etfpy.client.etf_client import ETFDBClient as _ETFDBClient
 from etfpy.utils import get_class_property_methods
 
@@ -59,7 +60,7 @@ class ETF(_ETFDBClient):
         return self._basic_info()
 
     @property
-    def holdings(self) -> dict:
+    def holdings(self) -> list:
         """Gets basic information about ETF.
 
         Example:
@@ -67,14 +68,7 @@ class ETF(_ETFDBClient):
         >>> etf = ETF("SPY")
         >>> etf.holdings
 
-        {
-        'Allocation': {'Asset Class': 'Equity',
-                'Asset Class Size': 'Large-Cap',
-                'Asset Class Style': 'Blend',
-                'Category': 'Large Cap Growth Equities',
-                'Region (General)': 'North America',
-                'Region (Specific)': 'U.S.'},
-        'Holdings': [{'Holding': 'Apple Inc.',
+         [{'Holding': 'Apple Inc.',
                'Share': '7.19%',
                'Symbol': 'AAPL',
                'Url': '/stock/AAPL/'},
@@ -133,22 +127,18 @@ class ETF(_ETFDBClient):
               {'Holding': 'Broadcom Inc.',
                'Share': '0.98%',
                'Symbol': 'AVGO',
-               'Url': '/stock/AVGO/'}],
-        'Statistics': {
-                '% of Assets in Top 10': {'ETF Database Category Average': '42.01%',
-                                          'FactSet Segment Average': '58.39%',
-                                          'SPY': '38.28%'},
-                '% of Assets in Top 15': {'ETF Database Category Average': '50.74%',
-                                          'FactSet Segment Average': '63.08%',
-                                          'SPY': '47.62%'},
-                '% of Assets in Top 50': {'ETF Database Category Average': '80.23%',
-                                          'FactSet Segment Average': '80.24%',
-                                          'SPY': '81.98%'},
-                'Number of Holdings': {'ETF Database Category Average': '412',
-                                       'FactSet Segment Average': '176',
-                                       'SPY': '1000'}}}
+               'Url': '/stock/AVGO/'}
+               ],
         """
         return self._holdings()
+
+    @property
+    def asset_categories(self) -> dict:
+        return self._asset_categories()
+
+    @property
+    def holding_statistics(self):
+        return self._number_of_holdings()
 
     @property
     def exposure(self) -> dict:
@@ -328,8 +318,12 @@ class ETF(_ETFDBClient):
         data = {}
         method_list = get_class_property_methods(self.__class__)
         for m in method_list:
-            data[m.title()] = getattr(self, m)
+            if not m.startswith("_"):
+                data[m.title()] = getattr(self, m)
         return data
+
+    def to_tabular(self):
+        return etf_to_tabular_wrapper(self)
 
 
 def load_etf(etf: str) -> ETF:

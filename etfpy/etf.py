@@ -1,4 +1,4 @@
-from etfpy.analytics.tabular_etf import etf_to_tabular_wrapper
+from etfpy.analytics.tabular_etf import TabularETF, etf_to_tabular_wrapper
 from etfpy.client.etf_client import ETFDBClient as _ETFDBClient
 from etfpy.utils import get_class_property_methods
 
@@ -322,7 +322,8 @@ class ETF(_ETFDBClient):
                 data[m.title()] = getattr(self, m)
         return data
 
-    def to_tabular(self):
+    def to_tabular(self) -> TabularETF:
+        """Returns a tabular ETF wrapper object for the given ETF object."""
         return etf_to_tabular_wrapper(self)
 
 

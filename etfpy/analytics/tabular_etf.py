@@ -322,10 +322,7 @@ _mapping = {
     "Volatility": TabularVolatilityETFData,
 }
 
-
-def etf_to_tabular_wrapper(
-    etf,
-) -> Union[
+TabularETF = Union[
     TabularRealEstateETFData,
     TabularBondETFData,
     TabularVolatilityETFData,
@@ -333,7 +330,12 @@ def etf_to_tabular_wrapper(
     TabularAlternativesETFData,
     TabularCurrencyETFData,
     TabularPreferredStockETFData,
-]:
+]
+
+
+def etf_to_tabular_wrapper(
+    etf,
+) -> TabularETF:
     """Returns a tabular ETF wrapper object for the given ETF object.
 
     Args:
@@ -350,3 +352,6 @@ def etf_to_tabular_wrapper(
     if cls is None:
         raise ValueError(f"Unsupported asset class: {etf.asset_class}")
     return cls(etf)
+
+
+__all__ = ["etf_to_tabular_wrapper", "TabularETF"]

@@ -19,7 +19,7 @@ from etfpy.utils import (
     handle_tbody_thead,
 )
 
-logger = get_logger(__name__)
+logger = get_logger("etf_client")
 
 
 def _load_available_etfs() -> list:

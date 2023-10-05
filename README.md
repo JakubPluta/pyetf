@@ -1,6 +1,9 @@
 # ETFpy
+[![codecov](https://codecov.io/gh/JakubPluta/pyetf/graph/badge.svg?token=736JAQGR1C)](https://codecov.io/gh/JakubPluta/pyetf)
+[![PyPI version](https://badge.fury.io/py/etfpy.svg)](https://badge.fury.io/py/etfpy)
+<a target="new" href="https://github.com/JakubPluta/pyetf"><img border=0 src="https://img.shields.io/github/stars/JakubPluta/pyetf.svg?style=social&label=Star&maxAge=60" alt="Star this repo"></a>
 
-ETFpy is a Python library that allows users to scrape data from etfdb.com, 
+**ETFpy** is a Python library that allows users to scrape data from etfdb.com, 
 a website that provides comprehensive information on ETFs, 
 including trading data, performance metrics, assets allocations end more. 
 

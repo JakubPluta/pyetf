@@ -10,7 +10,7 @@ from requests.packages.urllib3.util.retry import Retry
 
 from etfpy.log import get_logger
 
-logger = get_logger(__name__)
+logger = get_logger("utils")
 
 software_names = [SoftwareName.CHROME.value]
 operating_systems = [

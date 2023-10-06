@@ -1,9 +1,9 @@
-import bs4
-
-from etfpy import ETF
 from contextlib import nullcontext as does_not_raise
+
+import bs4
 import pytest
 
+from etfpy import ETF
 from etfpy.utils import get_class_property_methods
 
 

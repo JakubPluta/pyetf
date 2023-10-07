@@ -2,6 +2,11 @@ from typing import Union
 
 import pandas as pd
 
+from etfpy.analytics.utils import (
+    remove_sign_from_values_and_add_as_metric_suffix,
+    replace_value_in_df_cell,
+)
+from etfpy.deco import lowercase_and_underscore_column_names
 from etfpy.log import get_logger
 from etfpy.utils import remove_nested_benchmarks
 
@@ -25,14 +30,20 @@ class _BaseTabularETF:
             A pandas Series object.
         """
         try:
-            df = pd.Series(
-                remove_nested_benchmarks(data, self.etf.ticker)
-            ).reset_index()
+            df = (
+                pd.Series(remove_nested_benchmarks(data, self.etf.ticker))
+                .reset_index()
+                .replace({r"(?i)N/A": None}, regex=True)
+            )
             df.columns = ["metric", "value"]
         except (ValueError, TypeError, AttributeError) as vtae:
             logger.warning("couldn't create series from data dict %s", str(vtae))
             df = pd.Series()
         return df
+
+    @lowercase_and_underscore_column_names
+    def _create_data_frame(self, data) -> pd.DataFrame:
+        return pd.DataFrame(data).replace({r"(?i)N/A": None}, regex=True)
 
     @classmethod
     def from_etf(cls, etf):
@@ -52,37 +63,77 @@ class _BaseTabularETF:
     @property
     def holdings(self):
         """Returns a pandas DataFrame of the ETF's holdings."""
-
-        return pd.DataFrame(self.etf.holdings)
+        df = self._create_data_frame(self.etf.holdings)
+        df["share"] = replace_value_in_df_cell(df["share"], "%", "", float)
+        return df.rename(columns={"share": "%_share"})
 
     @property
     def performance(self):
         """Returns a pandas DataFrame of the ETF's performance."""
-
-        return pd.DataFrame(self.etf.performance)
+        df = self._create_data_frame(self.etf.performance)
+        df.columns = [f"%_{c}" for c in df.columns]
+        for col in df.columns:
+            df[col] = replace_value_in_df_cell(df[col], "%", "", float)
+        return df
 
     @property
     def dividends(self):
         """Returns a pandas DataFrame of the ETF's dividends."""
-
-        return pd.DataFrame(self.etf.dividends)
+        df = self._create_data_frame(self.etf.dividends)
+        _map = {
+            "annual_dividend_yield": "%",
+            "annual_dividend_rate": "$",
+            "dividend": "$",
+        }
+        for col, to_replace in _map.items():
+            df[col] = replace_value_in_df_cell(df[col], to_replace, "", float)
+        return df.rename(columns={"annual_dividend_rate": "%_annual_dividend_rate"})
 
     @property
     def holding_statistics(self):
         """Returns a pandas DataFrame of the ETF's holding statistics."""
-
-        return pd.DataFrame(self.etf.holding_statistics)
+        df = self._create_data_frame(self.etf.holding_statistics)
+        for col in df.columns:
+            df[col] = replace_value_in_df_cell(df[col], "%", "", float)
+        return df
 
     @property
     def info(self):
         """Returns a pandas Series of the ETF's information."""
+        df = self._create_series(self.etf.info)
+        df = remove_sign_from_values_and_add_as_metric_suffix(df)
+        return df
 
-        return self._create_series(self.etf.info)
+    @property
+    def info_numeric(self):
+        columns = [
+            "Expense Ratio",
+            "Price:",
+            "Change:",
+            "P/E Ratio",
+            "52 Week Lo",
+            "52 Week Hi",
+            "AUM",
+            "Shares",
+        ]
+        data = {
+            k[:-1] if k.endswith(":") else k: v
+            for k, v in self.etf.info.items()
+            if k in columns
+        }
+        try:
+            change = data["Change"]
+            change_val, *_ = change.split(" ")
+            data["Change"] = change_val
+        except (IndexError, AttributeError, KeyError) as iak:
+            logger.warning("couldn't extract change information: %s", str(iak))
+        df = self._create_series(data)
+        df = remove_sign_from_values_and_add_as_metric_suffix(df, to_replace=["$", "%"])
+        return df
 
     @property
     def volatility(self):
         """Returns a pandas Series of the ETF's volatility."""
-
         return self._create_series(self.etf.volatility)
 
     @property
@@ -94,8 +145,9 @@ class _BaseTabularETF:
     @property
     def technicals(self):
         """Returns a pandas Series of the ETF's technicals."""
-
-        return self._create_series(self.etf.technicals)
+        df = self._create_series(self.etf.technicals)
+        df = remove_sign_from_values_and_add_as_metric_suffix(df)
+        return df
 
     def __repr__(self):
         """Returns a string representation of the object."""

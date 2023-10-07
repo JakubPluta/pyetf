@@ -105,9 +105,35 @@ class _BaseTabularETF:
         return df
 
     @property
+    def info_numeric(self):
+        columns = [
+            "Expense Ratio",
+            "Price:",
+            "Change:",
+            "P/E Ratio",
+            "52 Week Lo",
+            "52 Week Hi",
+            "AUM",
+            "Shares",
+        ]
+        data = {
+            k[:-1] if k.endswith(":") else k: v
+            for k, v in self.etf.info.items()
+            if k in columns
+        }
+        try:
+            change = data["Change"]
+            change_val, *_ = change.split(" ")
+            data["Change"] = change_val
+        except (IndexError, AttributeError, KeyError) as iak:
+            logger.warning("couldn't extract change information: %s", str(iak))
+        df = self._create_series(data)
+        df = remove_sign_from_values_and_add_as_metric_suffix(df, to_replace=["$", "%"])
+        return df
+
+    @property
     def volatility(self):
         """Returns a pandas Series of the ETF's volatility."""
-
         return self._create_series(self.etf.volatility)
 
     @property

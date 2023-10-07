@@ -1,3 +1,5 @@
+from typing import Union
+
 import numpy as np
 import pandas as pd
 
@@ -25,15 +27,37 @@ def replace_value_in_df_cell(
 
 
 def remove_sign_from_values_and_add_as_metric_suffix(
-    df, col1="metric", col2="value", to_replace="$"
+    df, col1="metric", col2="value", to_replace: Union[list, str] = "$"
 ):
-    try:
-        rgx = rf"\{to_replace}"
+    to_replace = to_replace if isinstance(to_replace, (list, tuple)) else [to_replace]
 
-        df[col1] = np.where(
-            df[col2].str.contains(rgx), df[col1] + f" ({to_replace})", df[col1]
-        )
-        df[col2] = replace_value_in_df_cell(df[col2], to_replace, "")
-    except Exception as e:
-        logger.warning(str(e))
+    for tr in to_replace:
+        try:
+            rgx = rf"\{tr}"
+
+            df[col1] = np.where(
+                df[col2].str.contains(rgx), df[col1] + f" ({tr})", df[col1]
+            )
+            df[col2] = replace_value_in_df_cell(df[col2], tr, "")
+        except Exception as e:
+            logger.warning(str(e))
     return df
+
+
+def clean_data_values_to_float(val: str) -> float:
+    try:
+        val = val.replace(",", "")
+    except AttributeError as e:
+        logger.warning(str(e))
+
+    if val.endswith("%"):
+        value = float(val[:-1]) / 100.0
+    elif val.endswith("B"):
+        value = float(val[:-1]) * 1_000_000_000
+    elif val.endswith("M"):
+        value = float(val[:-1]) * 1_000_000
+    elif val.endswith("K"):
+        value = float(val[:-1]) * 1000
+    else:
+        value = float(val)
+    return round(value, 1)

@@ -1,6 +1,5 @@
 import functools
 
-
 from etfpy.utils import convert_spaces_to_underscore_and_lowercase
 
 

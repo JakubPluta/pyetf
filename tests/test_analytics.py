@@ -11,8 +11,8 @@ from etfpy.analytics.tabular_etf import (
 )
 from etfpy.analytics.utils import (
     clean_data_values_to_float,
-    replace_value_in_df_cell,
     remove_sign_from_values_and_add_as_metric_suffix,
+    replace_value_in_df_cell,
 )
 from etfpy.etf import ETF
 from tests.utils import soup

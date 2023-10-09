@@ -5,6 +5,7 @@ import pandas as pd
 from etfpy.analytics.utils import (
     remove_sign_from_values_and_add_as_metric_suffix,
     replace_value_in_df_cell,
+    clean_data_values_to_float,
 )
 from etfpy.deco import lowercase_and_underscore_column_names
 from etfpy.log import get_logger
@@ -100,7 +101,28 @@ class _BaseTabularETF:
     @property
     def info(self):
         """Returns a pandas Series of the ETF's information."""
-        df = self._create_series(self.etf.info)
+        columns = [
+            "Symbol",
+            "Url",
+            "Issuer",
+            "Brand",
+            "Inception",
+            "Index Tracked",
+            "Last Updated:",
+            "Category",
+            "Asset Class",
+            "Segment",
+            "Focus",
+            "Niche",
+            "Strategy",
+            "Weighting Scheme",
+        ]
+        data = {
+            k[:-1] if k.endswith(":") else k: v
+            for k, v in self.etf.info.items()
+            if k in columns
+        }
+        df = self._create_series(data)
         df = remove_sign_from_values_and_add_as_metric_suffix(df)
         return df
 
@@ -129,6 +151,7 @@ class _BaseTabularETF:
             logger.warning("couldn't extract change information: %s", str(iak))
         df = self._create_series(data)
         df = remove_sign_from_values_and_add_as_metric_suffix(df, to_replace=["$", "%"])
+        df["value"] = df["value"].apply(lambda x: clean_data_values_to_float(x))
         return df
 
     @property

@@ -1,18 +1,7 @@
-import os.path
-from pathlib import Path
 from unittest import mock
 
-import bs4
-
 from etfpy.client.etf_client import ETFDBClient
-
-here = Path(__file__).parent
-
-
-def soup(*args, **kwargs):
-    with open(os.path.join(here, "jepy.html"), encoding="utf8") as f:
-        data = bs4.BeautifulSoup(f, "html.parser")
-    return data
+from tests.utils import soup
 
 
 @mock.patch("etfpy.client.etf_client.ETFDBClient._make_soup_request", soup)

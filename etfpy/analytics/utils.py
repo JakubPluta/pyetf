@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, Optional
 
 import numpy as np
 import pandas as pd
@@ -44,7 +44,9 @@ def remove_sign_from_values_and_add_as_metric_suffix(
     return df
 
 
-def clean_data_values_to_float(val: str) -> float:
+def clean_data_values_to_float(val: str, round_to=2) -> Optional[float]:
+    if val is None:
+        return None
     try:
         val = val.replace(",", "")
     except AttributeError as e:
@@ -60,4 +62,4 @@ def clean_data_values_to_float(val: str) -> float:
         value = float(val[:-1]) * 1000
     else:
         value = float(val)
-    return round(value, 1)
+    return round(value, round_to)

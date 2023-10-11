@@ -3,9 +3,9 @@ from typing import Union
 import pandas as pd
 
 from etfpy.analytics.utils import (
+    clean_data_values_to_float,
     remove_sign_from_values_and_add_as_metric_suffix,
     replace_value_in_df_cell,
-    clean_data_values_to_float,
 )
 from etfpy.deco import lowercase_and_underscore_column_names
 from etfpy.log import get_logger
@@ -408,7 +408,7 @@ TabularETF = Union[
 ]
 
 
-def etf_to_tabular_wrapper(
+def convert_etf_to_tabular(
     etf,
 ) -> TabularETF:
     """Returns a tabular ETF wrapper object for the given ETF object.
@@ -429,4 +429,4 @@ def etf_to_tabular_wrapper(
     return cls(etf)
 
 
-__all__ = ["etf_to_tabular_wrapper", "TabularETF"]
+__all__ = ["convert_etf_to_tabular", "TabularETF"]

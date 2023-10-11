@@ -1,4 +1,4 @@
-from etfpy.analytics.tabular_etf import TabularETF, etf_to_tabular_wrapper
+from etfpy.analytics.tabular_etf import TabularETF, convert_etf_to_tabular
 from etfpy.client.etf_client import ETFDBClient as _ETFDBClient
 from etfpy.utils import get_class_property_methods
 
@@ -324,7 +324,7 @@ class ETF(_ETFDBClient):
 
     def to_tabular(self) -> TabularETF:
         """Returns a tabular ETF wrapper object for the given ETF object."""
-        return etf_to_tabular_wrapper(self)
+        return convert_etf_to_tabular(self)
 
 
 def load_etf(etf: str) -> ETF:
@@ -346,3 +346,24 @@ def load_etf(etf: str) -> ETF:
     >>> etf = load_etf("SPY")
     """
     return ETF(etf)
+
+
+def load_etf_as_tabular(etf: str) -> TabularETF:
+    """
+    Load an ETF object wrapped with pandas tabular representation of methods
+
+    Parameters
+    ----------
+    etf : str
+        The ticker symbol of the ETF to load.
+
+    Returns
+    -------
+    ETF
+        An TabularETF object.
+
+    Examples
+    --------
+    >>> etf = load_etf_as_tabular("SPY")
+    """
+    return ETF(etf).to_tabular()

@@ -7,7 +7,7 @@ from etfpy.analytics.tabular_etf import (
     TabularEquityETFData,
     _BaseTabularETF,
     _mapping,
-    etf_to_tabular_wrapper,
+    convert_etf_to_tabular,
 )
 from etfpy.analytics.utils import (
     clean_data_values_to_float,
@@ -26,13 +26,13 @@ def etf():
 
 @mock.patch("etfpy.etf._ETFDBClient._make_soup_request", soup)
 def test_should_properly_wrap_etf_to_tabular_form(etf):
-    tabular_df = etf_to_tabular_wrapper(etf)
+    tabular_df = convert_etf_to_tabular(etf)
     assert isinstance(tabular_df, TabularEquityETFData)
 
 
 @mock.patch("etfpy.etf._ETFDBClient._make_soup_request", soup)
 def test_should_tabular_form_have_dataframes_method(etf):
-    tabular_df = etf_to_tabular_wrapper(etf)
+    tabular_df = convert_etf_to_tabular(etf)
     assert isinstance(tabular_df.info, pd.DataFrame)
     assert isinstance(tabular_df.info_numeric, pd.DataFrame)
     assert isinstance(tabular_df.volatility, pd.DataFrame)
@@ -53,7 +53,7 @@ def test_should_properly_create_series(etf):
 def test_etf_to_tabular_wrapper_properly_provide_class(etf):
     for asset_class, cls in _mapping.items():
         etf.asset_class = asset_class
-        tabular_df = etf_to_tabular_wrapper(etf)
+        tabular_df = convert_etf_to_tabular(etf)
         assert isinstance(tabular_df, cls)
 
 

@@ -186,9 +186,115 @@ You will have access to mostly the same methods as etf has, but as a result you 
 >>> spy = ETF("SPY")
 >>> spy_tabular = spy.to_tabular()
 ```
-![img.png](assets/img.png)
+```python
+>>> spy.exposure_by_sector
+```
 
-![img_1.png](assets/img_1.png)
+| Metric                  | Value       |
+|-------------------------|-------------|
+| Technology Services     | 20.34       |
+| Electronic Technology   | 17.34       |
+| Finance                 | 11.96       |
+| Health Technology       | 9.99        |
+| Retail Trade            | 7.19        |
+| Consumer Non-Durables   | 4.78        |
+| Energy Minerals         | 3.64        |
+| Producer Manufacturing  | 3.55        |
+| Consumer Services       | 3.43        |
+| Commercial Services     | 3.02        |
+| Consumer Durables       | 2.65        |
+| Health Services         | 2.55        |
+| Utilities               | 2.35        |
+| Process Industries      | 1.98        |
+| Transportation          | 1.50        |
+| Industrial Services     | 1.02        |
+| Distribution Services   | 0.92        |
+| Communications          | 0.84        |
+| Non-Energy Minerals     | 0.54        |
+| CASH                    | 0.38        |
+
+```python
+>>> spy.info
+```
+| Metric               | Value                                   |
+|----------------------|-----------------------------------------|
+| Symbol               | SPY                                     |
+| Url                  | https://etfdb.com/etf/SPY               |
+| Issuer               | https://etfdb.com/issuer/state-street/  |
+| Brand                | https://etfdb.com/issuer/spdr/          |
+| Inception            | Jan 22, 1993                            |
+| Index Tracked        | https://etfdb.com/index/sp-500-index/   |
+| Last Updated         | Oct 11, 2023                            |
+| Category             | Size and Style                          |
+| Asset Class          | Equity                                  |
+| Segment              | Equity: U.S.  -  Large Cap              |
+| Focus                | Large Cap                               |
+| Niche                | Broad-based                             |
+| Strategy             | Vanilla                                 |
+| Weighting Scheme     | Market Cap                              |
+
+```python
+>>> spy.info_numeric
+```
+
+
+| Metric                            | Value             |
+|-----------------------------------|-------------------|
+| Expense Ratio (%)                 | 0.09              |
+| Price ()∣434.54∣∣Change()         | 2.25              |
+| P/E Ratio                         | 17.86             |
+| 52 Week Lo ()∣342.72∣∣52WeekHi()  | 457.83            |
+| AUM ($)                           | 398435000000.00   |
+| Shares                            | 927600000.00      |
+
+```python
+>>> spy.dividends
+```
+
+|                               | dividend      | dividend_date    | %_annual_dividend_rate  | annual_dividend_yield  |
+|-------------------------------|---------------|------------------|-------------------------|------------------------|
+| SPY                           | 1.58          | 2023-09-15       | 6.51                    | 1.51                   |
+| ETF Database Category Average | 0.33          | None             | 0.92                    | 1.30                   |
+| FactSet Segment Average       | 0.17          | None             | 0.59                    | 1.33                   |
+
+```python
+>>> spy.technicals
+```
+
+| Metric                                | Value      |
+|---------------------------------------|------------|
+| 20 Day MA ($)                         | 432.92     |
+| 60 Day MA ($)                         | 441.77     |
+| MACD 15 Period                        | 5.54       |
+| MACD 100 Period                       | -2.65      |
+| Williams % Range 10 Day               | 15.73      |
+| Williams % Range 20 Day               | 51.02      |
+| RSI 10 Day                            | 55         |
+| RSI 20 Day                            | 49         |
+| RSI 30 Day                            | 49         |
+| Ultimate Oscillator                   | 60         |
+| Lower Bollinger (10 Day) ($)          | 420.25     |
+| Upper Bollinger (10 Day) ($)          | 434.00     |
+| Lower Bollinger (20 Day) ($)          | 416.98     |
+| Upper Bollinger (20 Day) ($)          | 448.76     |
+| Lower Bollinger (30 Day) ($)          | 418.95     |
+| Upper Bollinger (30 Day) ($)          | 455.88     |
+| Support Level 1 ($)                   | 432.31     |
+| Support Level 2 ($)                   | 430.07     |
+| Resistance Level 1 ($)                | 437.00     |
+| Resistance Level 2 ($)                | 439.45     |
+| Stochastic Oscillator %D (1 Day)      | 65.76      |
+| Stochastic Oscillator %D (5 Day)      | 72.22      |
+| Stochastic Oscillator %K (1 Day)      | 65.64      |
+| Stochastic Oscillator %K (5 Day)      | 56.38      |
+| Tracking Difference Median (%)        | -0.03      |
+| Tracking Difference Max Upside (%)    | -0.02      |
+| Tracking Difference Max Downside (%)  | -0.10      |
+| Median Premium Discount (%)           | 0.01       |
+| Maximum Premium Discount (%)          | 0.10       |
+| Average Spread (%)                    | 1.06       |
+| Average Spread ($)                    | 1.06       |
+
 
 
 If you want to scrape list of all etfs with some basic information in terminal use:

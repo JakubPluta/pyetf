@@ -30,7 +30,9 @@ class BaseClient:
     def __init__(self, **kwargs: Any):
         self._base_url = "https://etfdb.com"
         self._api_url = f"{self._base_url}/api/screener/"
-
+        self._quotes_url = (
+            "https://etfflows.websol.barchart.com/proxies/timeseries/queryeod.ashx"
+        )
         self._requests_session = get_retry_session()
 
         for k, v in kwargs.items():

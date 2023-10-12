@@ -4,10 +4,10 @@ import os
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple
-
+from typing import Dict, List, Tuple, Optional
+import datetime
+import csv
 import bs4
-
 from etfpy.client._base_client import BaseClient
 from etfpy.exc import InvalidETFException
 from etfpy.log import get_logger
@@ -294,3 +294,41 @@ class ETFDBClient(BaseClient):
             basic_information.pop("Analyst Report")
 
         return basic_information
+
+    def _get_quotes(self, **params):
+        query_params = {
+            "symbol": self.ticker,
+            "data": "daily",
+            "maxrecords": 640,
+            "volume": "contract",
+            "order": "asc",
+            "dividends": "false",
+            "backadjust": "false",
+            "daystoexpiration": 1,
+            "contractroll": "expiration",
+        }
+        for k, v in params:
+            if k in query_params:
+                query_params.update({k: v})
+
+        r = self._session.get(self._quotes_url, params=query_params)
+
+        results = []
+        reader = csv.reader(r.text.split("\n"), delimiter=",")
+        headers = ["symbol", "date", "open", "high", "low", "close", "volume"]
+        for row in reader:
+            if row:
+                doc = dict(zip(headers, row))
+                dt_str: Optional[str] = doc.get("date")
+                try:
+                    dt = datetime.datetime.strptime(dt_str, "%Y-%m-%d").date()
+                    doc.update({"date": dt})
+                except (AttributeError, TypeError) as ate:
+                    logger.warning(
+                        "couldn't parse date string: %s to datetime.datetime.date object %s",
+                        str(dt_str),
+                        str(ate),
+                    )
+                    print(row)
+                results.append(doc)
+        return results

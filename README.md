@@ -238,14 +238,16 @@ You will have access to mostly the same methods as etf has, but as a result you 
 ```
 
 
-| Metric                            | Value             |
-|-----------------------------------|-------------------|
-| Expense Ratio (%)                 | 0.09              |
-| Price ()∣434.54∣∣Change()         | 2.25              |
-| P/E Ratio                         | 17.86             |
-| 52 Week Lo ()∣342.72∣∣52WeekHi()  | 457.83            |
-| AUM ($)                           | 398435000000.00   |
-| Shares                            | 927600000.00      |
+| Metric              | Value           |
+|---------------------|-----------------|
+| Expense Ratio (%)   | 0.09            |
+| Price ($)           | 434.54          |
+| Change($)           | 2.25            |
+| P/E Ratio           | 17.86           |
+| 52 Week Lo ($)      | 342.72          |
+| 52 Week Hi ($)      | 457.83          |
+| AUM ($)             | 398435000000.00 |
+| Shares              | 927600000.00    |
 
 ```python
 >>> spy.dividends

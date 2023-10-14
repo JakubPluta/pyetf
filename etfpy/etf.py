@@ -305,6 +305,10 @@ class ETF(_ETFDBClient):
         """
         return self._dividends()
 
+    def get_quotes(self, interval="daily", periods=360, order="asc"):
+        df = self._get_quotes(interval, periods, order)
+        return df.to_dict("records")
+
     def to_dict(self) -> dict:
         """
         Convert the object to a dictionary.

@@ -4,10 +4,11 @@ import os
 import re
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple, Optional
-import datetime
-import csv
+from typing import Dict, List, Tuple
+
 import bs4
+import pandas as pd
+
 from etfpy.client._base_client import BaseClient
 from etfpy.exc import InvalidETFException
 from etfpy.log import get_logger
@@ -295,40 +296,50 @@ class ETFDBClient(BaseClient):
 
         return basic_information
 
-    def _get_quotes(self, **params):
+    def _get_quotes(self, interval="daily", periods=360, order="asc"):
+        assert interval in [
+            "monthly",
+            "daily",
+            "yearly",
+            "quarterly",
+        ], "interval should be on of these: daily, monthly, yearly, quarterly"
+        if order not in ["asc", "desc"]:
+            logger.warning(
+                "order should be one of these: asc, desc - defaulting to asc"
+            )
+            order = "asc"
+
         query_params = {
             "symbol": self.ticker,
-            "data": "daily",
-            "maxrecords": 640,
+            "data": interval,
+            "maxrecords": periods,
             "volume": "contract",
-            "order": "asc",
+            "order": order,
             "dividends": "false",
             "backadjust": "false",
             "daystoexpiration": 1,
             "contractroll": "expiration",
         }
-        for k, v in params:
-            if k in query_params:
-                query_params.update({k: v})
 
         r = self._session.get(self._quotes_url, params=query_params)
 
-        results = []
-        reader = csv.reader(r.text.split("\n"), delimiter=",")
         headers = ["symbol", "date", "open", "high", "low", "close", "volume"]
-        for row in reader:
-            if row:
-                doc = dict(zip(headers, row))
-                dt_str: Optional[str] = doc.get("date")
-                try:
-                    dt = datetime.datetime.strptime(dt_str, "%Y-%m-%d").date()
-                    doc.update({"date": dt})
-                except (AttributeError, TypeError) as ate:
-                    logger.warning(
-                        "couldn't parse date string: %s to datetime.datetime.date object %s",
-                        str(dt_str),
-                        str(ate),
-                    )
-                    print(row)
-                results.append(doc)
-        return results
+        try:
+            data = list(x.split(",") for x in r.text.split("\n") if len(x) > 1)
+        except (AttributeError, TypeError) as ate:
+            logger.error("couldn't convert response do dataframe: %s", str(ate))
+            return pd.DataFrame(columns=headers)
+
+        df = pd.DataFrame(data, columns=headers)
+        df = df.astype(
+            {
+                "symbol": "str",
+                "volume": int,
+                "open": "float64",
+                "close": "float64",
+                "high": "float64",
+                "low": "float64",
+            }
+        )
+        df["date"] = pd.to_datetime(df["date"]).dt.date
+        return df

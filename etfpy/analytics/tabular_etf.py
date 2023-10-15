@@ -173,7 +173,7 @@ class _BaseTabularETF:
         return df
 
     def get_quotes(self, interval="daily", periods=360, order="asc"):
-        return self.etf._get_quotes(interval, periods, order)
+        return self.etf._get_quotes(self.etf.ticker, interval, periods, order)
 
     def __repr__(self):
         """Returns a string representation of the object."""

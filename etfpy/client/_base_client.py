@@ -1,5 +1,6 @@
 from typing import Any, Dict
 
+import pandas as pd
 import requests
 from requests import HTTPError
 
@@ -30,7 +31,9 @@ class BaseClient:
     def __init__(self, **kwargs: Any):
         self._base_url = "https://etfdb.com"
         self._api_url = f"{self._base_url}/api/screener/"
-
+        self._quotes_url = (
+            "https://etfflows.websol.barchart.com/proxies/timeseries/queryeod.ashx"
+        )
         self._requests_session = get_retry_session()
 
         for k, v in kwargs.items():
@@ -110,3 +113,51 @@ class BaseClient:
         except AttributeError as ae:
             logger.error(str(ae))
         return {}
+
+    def _get_quotes(self, ticker: str, interval="daily", periods=360, order="asc"):
+        assert interval in [
+            "monthly",
+            "daily",
+            "yearly",
+            "quarterly",
+        ], "interval should be on of these: daily, monthly, yearly, quarterly"
+        if order not in ["asc", "desc"]:
+            logger.warning(
+                "order should be one of these: asc, desc - defaulting to asc"
+            )
+            order = "asc"
+
+        query_params = {
+            "symbol": ticker,
+            "data": interval,
+            "maxrecords": periods,
+            "volume": "contract",
+            "order": order,
+            "dividends": "false",
+            "backadjust": "false",
+            "daystoexpiration": 1,
+            "contractroll": "expiration",
+        }
+
+        r = self._session.get(self._quotes_url, params=query_params)
+
+        headers = ["symbol", "date", "open", "high", "low", "close", "volume"]
+        try:
+            data = list(x.split(",") for x in r.text.split("\n") if len(x) > 1)
+        except (AttributeError, TypeError) as ate:
+            logger.error("couldn't convert response do dataframe: %s", str(ate))
+            return pd.DataFrame(columns=headers)
+
+        df = pd.DataFrame(data, columns=headers)
+        df = df.astype(
+            {
+                "symbol": "str",
+                "volume": int,
+                "open": "float64",
+                "close": "float64",
+                "high": "float64",
+                "low": "float64",
+            }
+        )
+        df["date"] = pd.to_datetime(df["date"]).dt.date
+        return df

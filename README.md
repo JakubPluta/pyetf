@@ -55,7 +55,7 @@ poetry install
 >>> spy = ETF("SPY")
 ```
 
-* Get basic ETF information
+#### Get basic ETF information
 
 ```python
 >>> spy.info
@@ -96,7 +96,7 @@ poetry install
 }
 ```
 
-* Get technical analysis metrics
+#### Get technical analysis metrics
 ```python
 >>> spy.technicals
 {
@@ -133,7 +133,7 @@ poetry install
 'Williams % Range 20 Day': '59.31'
 }
 ```
-* Get dividends metrics
+#### Get dividends metrics
 ```python
 >>> spy.dividends
 >>> {
@@ -152,8 +152,8 @@ poetry install
         }
 ```
 
-* Get performance metrics
-```
+#### Get performance metrics
+```python
 >>> spy.performance
 {
 '1 Month Return': {'ETF Database Category Average': '-2.89%',
@@ -178,7 +178,7 @@ poetry install
 ```
 
 
-* Get volatility metrics
+#### Get volatility metrics
 
 ```python
 >>> spy.volatility
@@ -192,7 +192,7 @@ poetry install
 }
 ```
 
-* Get holding statistics
+#### Get holding statistics
 ```python
 >>> spy.holding_statistics
 {
@@ -210,7 +210,7 @@ poetry install
                     'SPY': '1000'}
 }
 ```
-* Get holdings
+#### Get holdings
 ```python
 >>> spy.holdings
 
@@ -278,7 +278,7 @@ poetry install
 
 ```
 
-* Get exposures
+#### Get exposures
 
 ```python
 >>> spy.exposure
@@ -317,7 +317,7 @@ poetry install
  }
 ```
 
-* Get quotes
+#### Get quotes
 
 ```python
 >>> spy.get_quotes(interval="daily", periods=7)

@@ -57,7 +57,7 @@ poetry install
 
 * Get basic ETF information
 
-```
+```python
 >>> spy.info
 {
 '52 Week Hi': '$457.83',
@@ -97,7 +97,7 @@ poetry install
 ```
 
 * Get technical analysis metrics
-```
+```python
 >>> spy.technicals
 {
 '20 Day MA': '$50.45',
@@ -134,7 +134,7 @@ poetry install
 }
 ```
 * Get dividends metrics
-```
+```python
 >>> spy.dividends
 >>> {
     'Annual Dividend Rate': {'ETF Database Category Average': '$ 0.95',
@@ -180,7 +180,7 @@ poetry install
 
 * Get volatility metrics
 
-```
+```python
 >>> spy.volatility
 {
      '20 Day Volatility': '10.61%',
@@ -193,7 +193,7 @@ poetry install
 ```
 
 * Get holding statistics
-```
+```python
 >>> spy.holding_statistics
 {
 '% of Assets in Top 10': {'ETF Database Category Average': '42.67%',

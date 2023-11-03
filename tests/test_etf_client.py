@@ -1,4 +1,5 @@
 from unittest import mock
+
 from etfpy.client.etf_client import ETFDBClient
 from tests.utils import soup
 

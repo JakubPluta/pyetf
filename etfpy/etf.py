@@ -1,5 +1,6 @@
 from etfpy.analytics.tabular_etf import TabularETF, convert_etf_to_tabular
 from etfpy.client.etf_client import ETFDBClient as _ETFDBClient
+from etfpy.scripts.scrape_etfs import all_etfs_json
 from etfpy.utils import get_class_property_methods
 
 
@@ -371,3 +372,27 @@ def load_etf_as_tabular(etf: str) -> TabularETF:
     >>> etf = load_etf_as_tabular("SPY")
     """
     return ETF(etf).to_tabular()
+
+
+def etfs_to_json(file_path: str = None) -> None:
+    """
+    Scrape all ETFs data from etfdb.com and save it to a json file to a location specified by file_path.
+
+    Parameters
+    ----------
+    file_path : str, optional
+        Path to save the json file.
+        If None, the json file will be saved to the project root directory.
+
+    Retuns
+    ------
+    A JSON file containing all ETFs data.
+    Either in the project root directory or in the location specified by file_path.
+
+    Examples
+    --------
+    >>> from etfpy import etfs_to_json
+    >>> file_path = "PATH/TO/DESIRED/DIRECTORY/"
+    >>> etfs_to_json(file_path)
+    """
+    return all_etfs_json(file_path=file_path)

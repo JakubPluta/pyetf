@@ -38,8 +38,4 @@ def all_etfs_json(file_path: str = None) -> None:
 
 # TODO: Add argparser to specify params
 if __name__ == "__main__":
-    page_size = 250
-    file_path = os.path.join(ETFS_DATA_PATH, "etfs_list.json")
-    with open(file_path, "w") as f:
-        json.dump(get_all_etfs(page_size), f)
-    logger.debug("data was stored in %s", file_path)
+    all_etfs_json()

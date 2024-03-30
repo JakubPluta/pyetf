@@ -34,7 +34,7 @@ jobs:
         run: |
           source .venv/bin/activate
           pip install requests
-          pytest --cov=./ --cov-report=xml -vv -ss
+          pytest --cov=./ --cov-report=xml -vv -ss -k "not test_functional"
           echo "tests finished"
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

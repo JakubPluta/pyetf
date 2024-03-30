@@ -39,6 +39,7 @@ def test_basic_info():
         "Niche": "Broad-based",
         "Strategy": "Active",
         "Weighting Scheme": "Proprietary",
+        "Analyst Report": "https://etfdb.com/advisor_reports/JEPY/",
     }
 
 

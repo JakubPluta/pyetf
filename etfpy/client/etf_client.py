@@ -290,7 +290,4 @@ class ETFDBClient(BaseClient):
         basic_information.update(self._trading_data())
         basic_information.update(self._asset_categories())
         basic_information.update(self._factset_classification())
-        if "Analyst Report" in basic_information:
-            basic_information.pop("Analyst Report")
-
         return basic_information

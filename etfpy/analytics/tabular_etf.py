@@ -116,6 +116,7 @@ class _BaseTabularETF:
             "Niche",
             "Strategy",
             "Weighting Scheme",
+            "Analyst Report",
         ]
         data = {
             k[:-1] if k.endswith(":") else k: v

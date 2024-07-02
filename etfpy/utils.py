@@ -76,7 +76,12 @@ def _handle_spans(spans) -> Optional[Tuple[Any]]:
     """
     try:
         record = tuple(span.text.strip() for span in spans)
-        return record[:2] if len(record) > 2 else record
+        length = len(record)
+        if length > 2:
+            return record[:2]
+        elif length == 2:
+            return record
+        return None
     except Exception as e:
         logger.debug("couldn't parse profile container %s", str(e))
     return None

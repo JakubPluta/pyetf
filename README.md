@@ -382,7 +382,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 >>> spy_tabular = spy.to_tabular()
 ```
 ```python
->>> spy.exposure_by_sector
+>>> spy_tabular.exposure_by_sector
 ```
 
 | Metric                  | Value       |
@@ -409,7 +409,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 | CASH                    | 0.38        |
 
 ```python
->>> spy.info
+>>> spy_tabular.info
 ```
 | Metric               | Value                                   |
 |----------------------|-----------------------------------------|
@@ -429,7 +429,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 | Weighting Scheme     | Market Cap                              |
 
 ```python
->>> spy.info_numeric
+>>> spy_tabular.info_numeric
 ```
 
 
@@ -445,7 +445,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 | Shares              | 927600000.00    |
 
 ```python
->>> spy.dividends
+>>> spy_tabular.dividends
 ```
 
 |                               | dividend      | dividend_date    | %_annual_dividend_rate  | annual_dividend_yield  |
@@ -455,7 +455,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 | FactSet Segment Average       | 0.17          | None             | 0.59                    | 1.33                   |
 
 ```python
->>> spy.technicals
+>>> spy_tabular.technicals
 ```
 
 | Metric                                | Value      |
@@ -493,7 +493,7 @@ You will have access to mostly the same methods as etf has, but as a result you 
 | Average Spread ($)                    | 1.06       |
 
 ```python
->>> spy.get_quotes(interval="daily", periods=365)
+>>> spy_tabular.get_quotes(interval="daily", periods=365)
 ```
 
 | Symbol   | Date       | Open     | High     | Low      | Close    | Volume       |

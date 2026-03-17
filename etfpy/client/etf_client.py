@@ -15,6 +15,7 @@ from etfpy.utils import (
     _handle_nth_child,
     _handle_spans,
     chunkify,
+    get_headers,
     handle_find_all_rows,
     handle_tbody_thead,
 )
@@ -79,7 +80,7 @@ class ETFDBClient(BaseClient):
         BeautifulSoup object ready to parse with bs4 library
         """
         url = self._prepare_url()
-        response = self._session.get(url)
+        response = self._session.get(url, headers=get_headers(), timeout=30)
         if response.status_code != 200:
             raise Exception(f"response {response.status_code}: {response.reason}")
         return bs4.BeautifulSoup(response.text, "html.parser")

@@ -47,10 +47,19 @@ def remove_sign_from_values_and_add_as_metric_suffix(
 def clean_data_values_to_float(val: str, round_to=2) -> Optional[float]:
     if val is None:
         return None
+    if not isinstance(val, str):
+        try:
+            import math
+            if isinstance(val, float) and math.isnan(val):
+                return None
+            return round(float(val), round_to)
+        except (ValueError, TypeError):
+            return None
     try:
         val = val.replace(",", "")
     except AttributeError as e:
         logger.warning(str(e))
+        return None
 
     if val.endswith("%"):
         value = float(val[:-1]) / 100.0

@@ -24,7 +24,15 @@ def test_should_properly_get_headers():
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,"
         "image/avif,image/webp,image/apng,*/*;q=0.8",
         "Accept-Encoding": "gzip, deflate, br",
+        "Accept-Language": "en-US,en;q=0.9",
         "Connection": "keep-alive",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache",
+        "Sec-Fetch-Dest": "document",
+        "Sec-Fetch-Mode": "navigate",
+        "Sec-Fetch-Site": "none",
+        "Sec-Fetch-User": "?1",
+        "Upgrade-Insecure-Requests": "1",
     }
 
 
@@ -47,7 +55,7 @@ def test_should_handle_spans():
 
     html = '[<div class="stock-quote-title">\nPrice:</div>]'
     spans = bs4.BeautifulSoup(html, "html.parser").find_all("span")
-    assert _handle_spans(spans) == ()
+    assert _handle_spans(spans) is None
     assert _handle_spans("something") is None
 
 

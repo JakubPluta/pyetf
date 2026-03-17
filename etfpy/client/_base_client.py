@@ -94,7 +94,7 @@ class BaseClient:
             The response object.
         """
         return self._session.post(
-            self._api_url, json=request_body, headers=get_headers()
+            self._api_url, json=request_body, headers=get_headers(), timeout=30
         )
 
     def get_metadata(self) -> Dict:
@@ -139,7 +139,7 @@ class BaseClient:
             "contractroll": "expiration",
         }
 
-        r = self._session.get(self._quotes_url, params=query_params)
+        r = self._session.get(self._quotes_url, params=query_params, timeout=30)
 
         headers = ["symbol", "date", "open", "high", "low", "close", "volume"]
         try:

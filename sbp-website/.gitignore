@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Generated screenshots (produced by scripts/capture.mjs)
+.screenshots
+test-results
+playwright-report
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

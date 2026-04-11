@@ -65,14 +65,13 @@ def test_can_get_metadata(m, client):
     assert client.get_metadata() == {"some": "data"}
 
 
-@mock.patch.object(requests, "get")
-def test_service_get(mock_request_get, client):
+def test_service_get(client):
     def res():
         r = requests.Response()
         r.status_code = 200
         type(r).text = mock.PropertyMock(return_value=get_quotes())  # property mock
         return r
 
-    mock_request_get.return_value = res()
-    quotes = client._get_quotes("SPY")
+    with mock.patch.object(client._requests_session, "get", return_value=res()):
+        quotes = client._get_quotes("SPY")
     assert isinstance(quotes, pd.DataFrame) and quotes["symbol"].unique()[0] == "SPY"
